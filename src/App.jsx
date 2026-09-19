@@ -1,22 +1,13 @@
 import { useState, useMemo, useEffect } from 'react'
 import { RACES, CLASSES, RACE_KEYS, CLASS_KEYS } from './data.js'
 import { buildName, makeId } from './generator.js'
+import PinIcon from './components/PinIcon.jsx'
+import FieldSelect from './components/FieldSelect.jsx'
+import ToggleGroup from './components/ToggleGroup.jsx'
+import ComplexityControl, { COMPLEXITY_LABELS } from './components/ComplexityControl.jsx'
+import Ledger from './components/Ledger.jsx'
 
 const PIN_STORAGE_KEY = 'heronym:pinned:v1'
-const COMPLEXITY_LABELS = ['Brief', 'Modest', 'Balanced', 'Ornate', 'Grand']
-
-function PinIcon({ filled }) {
-  return (
-    <svg viewBox="0 0 24 24" width={14} height={14} aria-hidden="true">
-      <path
-        d="M12 2c-3.3 0-6 2.7-6 6 0 4.2 6 12 6 12s6-7.8 6-12c0-3.3-2.7-6-6-6zm0 8.2c-1.2 0-2.2-1-2.2-2.2s1-2.2 2.2-2.2 2.2 1 2.2 2.2-1 2.2-2.2 2.2z"
-        fill={filled ? 'currentColor' : 'none'}
-        stroke="currentColor"
-        strokeWidth={1.6}
-      />
-    </svg>
-  )
-}
 
 export default function App() {
   const [race, setRace] = useState('human')
@@ -87,73 +78,33 @@ export default function App() {
         <div className="panel">
           <h2>Lineage &amp; Calling</h2>
 
-          <div className="field">
-            <label htmlFor="race-select">Race</label>
-            <select id="race-select" value={race} onChange={(e) => setRace(e.target.value)}>
-              {RACE_KEYS.map((k) => (
-                <option key={k} value={k}>
-                  {RACES[k].label}
-                </option>
-              ))}
-              <option value="random">Random</option>
-            </select>
-          </div>
+          <FieldSelect
+            id="race-select"
+            label="Race"
+            value={race}
+            options={[
+              ...RACE_KEYS.map((k) => ({ value: k, label: RACES[k].label })),
+              { value: 'random', label: 'Random' },
+            ]}
+            onChange={(e) => setRace(e.target.value)}
+          />
 
-          <div className="field">
-            <label htmlFor="class-select">Class</label>
-            <select id="class-select" value={cls} onChange={(e) => setCls(e.target.value)}>
-              {CLASS_KEYS.map((k) => (
-                <option key={k} value={k}>
-                  {CLASSES[k].label}
-                </option>
-              ))}
-              <option value="random">Random</option>
-            </select>
-          </div>
+          <FieldSelect
+            id="class-select"
+            label="Class"
+            value={cls}
+            options={[
+              ...CLASS_KEYS.map((k) => ({ value: k, label: CLASSES[k].label })),
+              { value: 'random', label: 'Random' },
+            ]}
+            onChange={(e) => setCls(e.target.value)}
+          />
 
           <h2 style={{ marginTop: '26px' }}>Name Parts</h2>
-          <div className="toggles">
-            <label className="toggle">
-              <input type="checkbox" checked={opts.first} onChange={() => toggle('first')} />
-              <span>First name</span>
-            </label>
-            <label className="toggle">
-              <input type="checkbox" checked={opts.middle} onChange={() => toggle('middle')} />
-              <span>Middle name</span>
-            </label>
-            <label className="toggle">
-              <input type="checkbox" checked={opts.surname} onChange={() => toggle('surname')} />
-              <span>Surname</span>
-            </label>
-            <label className="toggle">
-              <input type="checkbox" checked={opts.title} onChange={() => toggle('title')} />
-              <span>Title</span>
-            </label>
-          </div>
+          <ToggleGroup opts={opts} onToggle={toggle} />
 
           <h2 style={{ marginTop: '26px' }}>Complexity</h2>
-          <div className="field" style={{ marginBottom: '8px' }}>
-            <div className="complexity-row">
-              <input
-                type="range"
-                min={1}
-                max={5}
-                step={1}
-                value={complexity}
-                onChange={(e) => setComplexity(Number(e.target.value))}
-                className="complexity-slider"
-                aria-label="Name complexity"
-              />
-              <span className="complexity-value">{COMPLEXITY_LABELS[complexity - 1]}</span>
-            </div>
-            <div className="complexity-ticks">
-              {COMPLEXITY_LABELS.map((label, i) => (
-                <span key={label} className={i + 1 === complexity ? 'active' : ''}>
-                  {i + 1}
-                </span>
-              ))}
-            </div>
-          </div>
+          <ComplexityControl value={complexity} onChange={setComplexity} />
 
           <p className="hint">
             {opts.title
@@ -196,60 +147,22 @@ export default function App() {
             </button>
           </div>
 
-          <div className="ledger">
-            <h3>Recently Forged</h3>
-            {history.length ? (
-              <ul className="ledger-list">
-                {history.map((item) => (
-                  <li key={item.id}>
-                    <span className="lname">{item.full || '(empty)'}</span>
-                    <span className="ltag">
-                      {item.raceLabel} {item.classLabel}
-                    </span>
-                    <button
-                      className={`row-pin${isPinned(item.id) ? ' pinned' : ''}`}
-                      onClick={() => togglePin(item)}
-                      aria-label={isPinned(item.id) ? 'Unpin this name' : 'Pin this name'}
-                      title={isPinned(item.id) ? 'Unpin' : 'Pin for safekeeping'}
-                    >
-                      <PinIcon filled={isPinned(item.id)} />
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <div className="empty-ledger">Names you forge will be recorded here.</div>
-            )}
-          </div>
+          <Ledger
+            title="Recently Forged"
+            items={history}
+            isPinned={isPinned}
+            onTogglePin={togglePin}
+            emptyText="Names you forge will be recorded here."
+          />
 
-          <div className="ledger pinned-ledger">
-            <h3>Pinned</h3>
-            {pinned.length ? (
-              <ul className="ledger-list">
-                {pinned.map((item) => (
-                  <li key={item.id}>
-                    <span className="lname">{item.full || '(empty)'}</span>
-                    <span className="ltag">
-                      {item.raceLabel} {item.classLabel}
-                    </span>
-                    <button
-                      className="row-pin pinned"
-                      onClick={() => unpin(item.id)}
-                      aria-label="Unpin this name"
-                      title="Unpin"
-                    >
-                      <PinIcon filled={true} />
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <div className="empty-ledger">
-                Pin a name to keep it safe — pinned names are saved in this browser and will still be here next
-                time.
-              </div>
-            )}
-          </div>
+          <Ledger
+            title="Pinned"
+            items={pinned}
+            isPinned={isPinned}
+            onUnpin={unpin}
+            emptyText="Pin a name to keep it safe — pinned names are saved in this browser and will still be here next time."
+            className="pinned-ledger"
+          />
         </div>
       </div>
     </div>
