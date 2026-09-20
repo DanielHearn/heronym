@@ -26,7 +26,12 @@ type NameEntry = LedgerItem & {
 export default function App() {
   const [race, setRace] = useState<RaceKey | 'random'>('human')
   const [cls, setCls] = useState<ClassKey | 'random'>('warrior')
-  const [opts, setOpts] = useState<NameOptions>({ first: true, middle: false, surname: true, title: false })
+  const [opts, setOpts] = useState<NameOptions>({
+    first: true,
+    middle: false,
+    surname: true,
+    title: false,
+  })
   const [current, setCurrent] = useState<NameEntry | null>(null)
   const [history, setHistory] = useState<NameEntry[]>([])
   const [pinned, setPinned] = useState<NameEntry[]>(() => {
@@ -70,7 +75,9 @@ export default function App() {
   function togglePin(item: LedgerItem | null | undefined) {
     if (!item || !item.full) return
     setPinned((p) =>
-      p.some((x) => x.id === item.id) ? p.filter((x) => x.id !== item.id) : [item as NameEntry, ...p],
+      p.some((x) => x.id === item.id)
+        ? p.filter((x) => x.id !== item.id)
+        : [item as NameEntry, ...p],
     )
   }
   function unpin(id: string) {
@@ -123,9 +130,7 @@ export default function App() {
           <ComplexityControl value={complexity} onChange={setComplexity} />
 
           <p className="hint">
-            {opts.title
-              ? 'Every part is forged fresh from themed sound-fragments — race shapes first, middle, and surnames; class shapes the epithet, in the manner of "Name, the Ashenblade." Complexity controls how many syllables and fragments are fused together.'
-              : 'Every part is forged fresh from themed sound-fragments each time, so no two names are quite alike. Complexity controls how many syllables and fragments are fused together.'}
+            Complexity controls how many syllables and fragments are fused together.
           </p>
         </div>
 
@@ -168,7 +173,7 @@ export default function App() {
             items={history}
             isPinned={isPinned}
             onTogglePin={togglePin}
-            emptyText="Names you forge will be recorded here."
+            emptyText="Names you forge will be recorded here"
           />
 
           <Ledger
@@ -176,7 +181,7 @@ export default function App() {
             items={pinned}
             isPinned={isPinned}
             onUnpin={unpin}
-            emptyText="Pin a name to keep it safe — pinned names are saved in this browser and will still be here next time."
+            emptyText="Pin a name to keep it safe"
             className="pinned-ledger"
           />
         </div>

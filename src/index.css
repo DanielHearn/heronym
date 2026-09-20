@@ -22,7 +22,8 @@ body,
   padding: 0;
 }
 body {
-  background: radial-gradient(ellipse at 20% -10%, #2c2013 0%, transparent 55%),
+  background:
+    radial-gradient(ellipse at 20% -10%, #2c2013 0%, transparent 55%),
     radial-gradient(ellipse at 90% 110%, #241a0f 0%, transparent 50%), var(--ink);
   color: var(--text-light);
   min-height: 100vh;
@@ -56,7 +57,6 @@ body {
 .masthead p {
   color: var(--text-muted);
   font-size: 1.08rem;
-  font-style: italic;
   margin: 0;
 }
 .rule {
@@ -206,7 +206,9 @@ select:focus-visible {
 
 .complexity-row {
   display: flex;
+  flex-direction: column;
   align-items: center;
+  width: 100%;
   gap: 14px;
 }
 .complexity-slider {
@@ -217,6 +219,7 @@ select:focus-visible {
   background: linear-gradient(90deg, var(--gold), #4a3a24);
   outline: none;
   cursor: pointer;
+  width: 100%;
 }
 .complexity-slider::-webkit-slider-thumb {
   appearance: none;
@@ -284,7 +287,9 @@ select:focus-visible {
   justify-content: center;
   text-align: center;
   clip-path: polygon(0% 2%, 2% 0%, 98% 0%, 100% 2%, 100% 98%, 98% 100%, 2% 100%, 0% 98%);
-  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.45), inset 0 0 60px rgba(120, 90, 40, 0.15);
+  box-shadow:
+    0 18px 50px rgba(0, 0, 0, 0.45),
+    inset 0 0 60px rgba(120, 90, 40, 0.15);
 }
 .scroll::before {
   content: '';
@@ -297,7 +302,6 @@ select:focus-visible {
   font-size: 0.85rem;
   letter-spacing: 0.03em;
   color: #6b5a35;
-  font-style: italic;
   margin-bottom: 10px;
   min-height: 1.2em;
 }
@@ -310,7 +314,6 @@ select:focus-visible {
 }
 .scroll .placeholder {
   color: #8a7850;
-  font-style: italic;
   font-size: 1.15rem;
 }
 .scroll.reveal .name {
@@ -348,11 +351,15 @@ select:focus-visible {
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease;
 }
 .seal:hover {
   transform: translateY(-2px);
-  box-shadow: 0 12px 26px rgba(0, 0, 0, 0.55), 0 0 18px rgba(217, 172, 78, 0.35);
+  box-shadow:
+    0 12px 26px rgba(0, 0, 0, 0.55),
+    0 0 18px rgba(217, 172, 78, 0.35);
 }
 .seal:active {
   transform: translateY(0px) scale(0.97);
@@ -400,13 +407,11 @@ select:focus-visible {
 .ledger-list .ltag {
   color: var(--text-dim);
   font-size: 0.85rem;
-  font-style: italic;
   white-space: nowrap;
   flex-shrink: 0;
 }
 .empty-ledger {
   color: var(--text-dim);
-  font-style: italic;
   font-size: 0.9rem;
   padding: 10px 2px;
 }

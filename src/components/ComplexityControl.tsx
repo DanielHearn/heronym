@@ -9,6 +9,7 @@ export default function ComplexityControl({ value, onChange }: ComplexityControl
   return (
     <div className="field" style={{ marginBottom: '8px' }}>
       <div className="complexity-row">
+        <span className="complexity-value">{COMPLEXITY_LABELS[value - 1]}</span>
         <input
           type="range"
           min={1}
@@ -19,7 +20,6 @@ export default function ComplexityControl({ value, onChange }: ComplexityControl
           className="complexity-slider"
           aria-label="Name complexity"
         />
-        <span className="complexity-value">{COMPLEXITY_LABELS[value - 1]}</span>
       </div>
       <div className="complexity-ticks">
         {COMPLEXITY_LABELS.map((label, index) => (
