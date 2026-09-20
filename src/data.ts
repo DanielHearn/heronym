@@ -92,5 +92,8 @@ export const CLASSES = {
   warlock: { label: 'Warlock', title: { prefixes: ['Pact','Void','Hex','Shadow','Dread','Star','Covenant','Abyss','Ashen','Night','Grim','Soul'], suffixes: ['bound','caller','weaver','pact','born','less','sworn','whisper','ward','forged','mark','wraith'] } },
 }
 
-export const RACE_KEYS = Object.keys(RACES)
-export const CLASS_KEYS = Object.keys(CLASSES)
+export type RaceKey = keyof typeof RACES
+export type ClassKey = keyof typeof CLASSES
+
+export const RACE_KEYS = Object.keys(RACES) as RaceKey[]
+export const CLASS_KEYS = Object.keys(CLASSES) as ClassKey[]

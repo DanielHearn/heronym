@@ -1,21 +1,35 @@
 import { useState, useMemo, useEffect } from 'react'
-import { RACES, CLASSES, RACE_KEYS, CLASS_KEYS } from './data.js'
-import { buildName, makeId } from './generator.js'
-import PinIcon from './components/PinIcon.jsx'
-import FieldSelect from './components/FieldSelect.jsx'
-import ToggleGroup from './components/ToggleGroup.jsx'
-import ComplexityControl, { COMPLEXITY_LABELS } from './components/ComplexityControl.jsx'
-import Ledger from './components/Ledger.jsx'
+import { RACES, CLASSES, RACE_KEYS, CLASS_KEYS, type RaceKey, type ClassKey } from './data'
+import { buildName, makeId } from './generator'
+import PinIcon from './components/PinIcon'
+import FieldSelect from './components/FieldSelect'
+import ToggleGroup from './components/ToggleGroup'
+import ComplexityControl from './components/ComplexityControl'
+import Ledger, { type LedgerItem } from './components/Ledger'
 
 const PIN_STORAGE_KEY = 'heronym:pinned:v1'
 
+type NameOptions = {
+  first: boolean
+  middle: boolean
+  surname: boolean
+  title: boolean
+}
+
+type NameEntry = LedgerItem & {
+  id: string
+  full: string
+  raceLabel: string
+  classLabel: string
+}
+
 export default function App() {
-  const [race, setRace] = useState('human')
-  const [cls, setCls] = useState('warrior')
-  const [opts, setOpts] = useState({ first: true, middle: false, surname: true, title: false })
-  const [current, setCurrent] = useState(null)
-  const [history, setHistory] = useState([])
-  const [pinned, setPinned] = useState(() => {
+  const [race, setRace] = useState<RaceKey | 'random'>('human')
+  const [cls, setCls] = useState<ClassKey | 'random'>('warrior')
+  const [opts, setOpts] = useState<NameOptions>({ first: true, middle: false, surname: true, title: false })
+  const [current, setCurrent] = useState<NameEntry | null>(null)
+  const [history, setHistory] = useState<NameEntry[]>([])
+  const [pinned, setPinned] = useState<NameEntry[]>(() => {
     try {
       const raw = window.localStorage.getItem(PIN_STORAGE_KEY)
       const parsed = raw ? JSON.parse(raw) : []
@@ -37,27 +51,29 @@ export default function App() {
 
   const anySelected = opts.first || opts.middle || opts.surname || opts.title
 
-  function toggle(key) {
+  function toggle(key: keyof NameOptions) {
     setOpts((o) => ({ ...o, [key]: !o[key] }))
   }
 
   function generate() {
     if (!anySelected) return
-    const result = { ...buildName(race, cls, opts, complexity), id: makeId() }
+    const result: NameEntry = { ...buildName(race, cls, opts, complexity), id: makeId() }
     setCurrent(result)
     setHistory((hist) => [result, ...hist].slice(0, 8))
     setReveal(false)
     requestAnimationFrame(() => setReveal(true))
   }
 
-  function isPinned(id) {
+  function isPinned(id: string) {
     return pinned.some((p) => p.id === id)
   }
-  function togglePin(item) {
+  function togglePin(item: LedgerItem | null | undefined) {
     if (!item || !item.full) return
-    setPinned((p) => (p.some((x) => x.id === item.id) ? p.filter((x) => x.id !== item.id) : [item, ...p]))
+    setPinned((p) =>
+      p.some((x) => x.id === item.id) ? p.filter((x) => x.id !== item.id) : [item as NameEntry, ...p],
+    )
   }
-  function unpin(id) {
+  function unpin(id: string) {
     setPinned((p) => p.filter((x) => x.id !== id))
   }
 

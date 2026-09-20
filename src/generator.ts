@@ -1,4 +1,4 @@
-import { RACES, CLASSES, RACE_KEYS, CLASS_KEYS } from './data.js'
+import { RACES, CLASSES, RACE_KEYS, CLASS_KEYS, type RaceKey, type ClassKey } from './data'
 
 export function pick(arr) {
   return arr[Math.floor(Math.random() * arr.length)]
@@ -52,17 +52,29 @@ export function forgeCompound(bank, complexity) {
   return s
 }
 
-export function buildName(raceKey, classKey, opts, complexity) {
+type NameOptions = {
+  first: boolean
+  middle: boolean
+  surname: boolean
+  title: boolean
+}
+
+export function buildName(
+  raceKey: RaceKey | 'random',
+  classKey: ClassKey | 'random',
+  opts: NameOptions,
+  complexity: number,
+) {
   const rKey = raceKey === 'random' ? pick(RACE_KEYS) : raceKey
   const cKey = classKey === 'random' ? pick(CLASS_KEYS) : classKey
   const race = RACES[rKey]
   const cls = CLASSES[cKey]
 
-  let first = null
-  let middle = null
-  let surname = null
-  let title = null
-  const parts = []
+  let first: string | null = null
+  let middle: string | null = null
+  let surname: string | null = null
+  let title: string | null = null
+  const parts: string[] = []
 
   if (opts.first) {
     first = forgePersonalName(race.syll, null, complexity)

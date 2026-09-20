@@ -1,6 +1,11 @@
-const COMPLEXITY_LABELS = ['Brief', 'Modest', 'Balanced', 'Ornate', 'Grand']
+const COMPLEXITY_LABELS = ['Brief', 'Modest', 'Balanced', 'Ornate', 'Grand'] as const
 
-export default function ComplexityControl({ value, onChange }) {
+type ComplexityControlProps = {
+  value: number
+  onChange: (value: number) => void
+}
+
+export default function ComplexityControl({ value, onChange }: ComplexityControlProps) {
   return (
     <div className="field" style={{ marginBottom: '8px' }}>
       <div className="complexity-row">
