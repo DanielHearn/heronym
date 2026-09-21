@@ -45,6 +45,8 @@ export default function App() {
   })
   const [reveal, setReveal] = useState(false)
   const [complexity, setComplexity] = useState(1)
+  const [optionsOpen, setOptionsOpen] = useState(true)
+  const isMobile = useMemo(() => window.innerWidth <= 760, [])
 
   useEffect(() => {
     try {
@@ -102,37 +104,49 @@ export default function App() {
 
       <div className="layout">
         <div className="panel">
-          <h2>Lineage &amp; Calling</h2>
+          <div className="panel-heading">
+            <h2>Lineage &amp; Calling</h2>
+            <button
+              className="options-toggle"
+              type="button"
+              aria-expanded={optionsOpen}
+              onClick={() => setOptionsOpen((open) => !open)}
+            >
+              {optionsOpen ? 'Hide options' : 'Show options'}
+            </button>
+          </div>
 
-          <FieldSelect
-            id="race-select"
-            label="Race"
-            value={race}
-            options={[
-              ...RACE_KEYS.map((k) => ({ value: k, label: RACES[k].label })),
-              { value: 'random', label: 'Random' },
-            ]}
-            onChange={(e) => setRace(e.target.value)}
-          />
+          <div className={`options-content${optionsOpen ? '' : ' collapsed'}`}>
+            <FieldSelect
+              id="race-select"
+              label="Race"
+              value={race}
+              options={[
+                ...RACE_KEYS.map((k) => ({ value: k, label: RACES[k].label })),
+                { value: 'random', label: 'Random' },
+              ]}
+              onChange={(e) => setRace(e.target.value as RaceKey | 'random')}
+            />
 
-          <FieldSelect
-            id="class-select"
-            label="Class"
-            value={cls}
-            options={[
-              ...CLASS_KEYS.map((k) => ({ value: k, label: CLASSES[k].label })),
-              { value: 'random', label: 'Random' },
-            ]}
-            onChange={(e) => setCls(e.target.value)}
-          />
+            <FieldSelect
+              id="class-select"
+              label="Class"
+              value={cls}
+              options={[
+                ...CLASS_KEYS.map((k) => ({ value: k, label: CLASSES[k].label })),
+                { value: 'random', label: 'Random' },
+              ]}
+              onChange={(e) => setCls(e.target.value as ClassKey | 'random')}
+            />
 
-          <h2 style={{ marginTop: '26px' }}>Name Parts</h2>
-          <ToggleGroup opts={opts} onToggle={toggle} />
+            <h2 style={{ marginTop: '26px' }}>Name Parts</h2>
+            <ToggleGroup opts={opts} onToggle={toggle} />
 
-          <h2 style={{ marginTop: '26px' }}>Complexity</h2>
-          <ComplexityControl value={complexity} max={3} onChange={setComplexity} />
+            <h2 style={{ marginTop: '26px' }}>Complexity</h2>
+            <ComplexityControl value={complexity} max={3} onChange={setComplexity} />
 
-          <p className="hint">Controls how many syllables and fragments are fused together</p>
+            <p className="hint">Controls how many syllables and fragments are fused together</p>
+          </div>
         </div>
 
         <div className="stage">
@@ -175,6 +189,7 @@ export default function App() {
             isPinned={isPinned}
             onTogglePin={togglePin}
             emptyText="Names you generate will be recorded here"
+            maxItems={isMobile ? 4 : 8}
           />
 
           <Ledger

@@ -15,6 +15,7 @@ type LedgerProps = {
   onUnpin?: (id: string) => void
   emptyText: string
   className?: string
+  maxItems?: number
 }
 
 export default function Ledger({
@@ -25,13 +26,16 @@ export default function Ledger({
   onUnpin,
   emptyText,
   className = '',
+  maxItems,
 }: LedgerProps) {
+  const displayedItems = maxItems !== undefined ? items.slice(0, maxItems) : items
+
   return (
     <div className={`ledger ${className}`.trim()}>
       <h3>{title}</h3>
-      {items.length ? (
+      {displayedItems.length ? (
         <ul className="ledger-list">
-          {items.map((item) => {
+          {displayedItems.map((item) => {
             const pinned = isPinned(item.id)
             const handlePinClick = onUnpin ? () => onUnpin(item.id) : () => onTogglePin?.(item)
 
