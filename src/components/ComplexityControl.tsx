@@ -13,7 +13,7 @@ export default function ComplexityControl({ value, onChange }: ComplexityControl
         <input
           type="range"
           min={1}
-          max={5}
+          max={3}
           step={1}
           value={value}
           onChange={(event) => onChange(Number(event.target.value))}

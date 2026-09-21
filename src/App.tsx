@@ -44,7 +44,7 @@ export default function App() {
     }
   })
   const [reveal, setReveal] = useState(false)
-  const [complexity, setComplexity] = useState(3)
+  const [complexity, setComplexity] = useState(1)
 
   useEffect(() => {
     try {
