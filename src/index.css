@@ -282,11 +282,11 @@ select:focus-visible {
   background: var(--parchment);
   color: #2a2014;
   padding: 52px 44px 44px;
-  min-height: 220px;
+  min-height: 270px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   text-align: center;
   clip-path: polygon(0% 2%, 2% 0%, 98% 0%, 100% 2%, 100% 98%, 98% 100%, 2% 100%, 0% 98%);
   box-shadow:
@@ -313,25 +313,11 @@ select:focus-visible {
   font-size: clamp(1.5rem, 3.4vw, 2.5rem);
   line-height: 1.25;
   color: #3a2c14;
+  margin-top: 0.33em;
 }
 .scroll .placeholder {
   color: #8a7850;
   font-size: 1.15rem;
-}
-.scroll.reveal .name {
-  animation: unfurl 0.5s ease-out;
-}
-@keyframes unfurl {
-  from {
-    opacity: 0;
-    transform: translateY(6px);
-    letter-spacing: 0.15em;
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-    letter-spacing: normal;
-  }
 }
 
 .seal-wrap {

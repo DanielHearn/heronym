@@ -54,6 +54,10 @@ export default function App() {
     }
   }, [pinned])
 
+  useEffect(() => {
+    generate()
+  }, [race, cls, opts, complexity])
+
   const anySelected = opts.first || opts.middle || opts.surname || opts.title
 
   function toggle(key: keyof NameOptions) {
@@ -164,16 +168,16 @@ export default function App() {
               style={!anySelected ? { opacity: 0.5, cursor: 'not-allowed' } : undefined}
               aria-label="Generate name"
             >
-              FORGE
+              Generate
             </button>
           </div>
 
           <Ledger
-            title="Recently Forged"
+            title="Recently Generated"
             items={history}
             isPinned={isPinned}
             onTogglePin={togglePin}
-            emptyText="Names you forge will be recorded here"
+            emptyText="Names you generate will be recorded here"
           />
 
           <Ledger
