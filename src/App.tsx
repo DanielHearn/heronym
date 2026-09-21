@@ -98,7 +98,6 @@ export default function App() {
       <div className="masthead">
         <h1>Heronym</h1>
         <p>A generator of names for heroes, villains, and everyone between</p>
-        <div className="rule" />
       </div>
 
       <div className="layout">
@@ -131,11 +130,9 @@ export default function App() {
           <ToggleGroup opts={opts} onToggle={toggle} />
 
           <h2 style={{ marginTop: '26px' }}>Complexity</h2>
-          <ComplexityControl value={complexity} onChange={setComplexity} />
+          <ComplexityControl value={complexity} max={3} onChange={setComplexity} />
 
-          <p className="hint">
-            Complexity controls how many syllables and fragments are fused together.
-          </p>
+          <p className="hint">Controls how many syllables and fragments are fused together</p>
         </div>
 
         <div className="stage">

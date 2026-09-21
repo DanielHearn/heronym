@@ -1,11 +1,12 @@
-const COMPLEXITY_LABELS = ['Brief', 'Modest', 'Balanced', 'Ornate', 'Grand'] as const
+const COMPLEXITY_LABELS = ['Low', 'Medium', 'High'] as const
 
 type ComplexityControlProps = {
   value: number
+  max: number
   onChange: (value: number) => void
 }
 
-export default function ComplexityControl({ value, onChange }: ComplexityControlProps) {
+export default function ComplexityControl({ value, max, onChange }: ComplexityControlProps) {
   return (
     <div className="field" style={{ marginBottom: '8px' }}>
       <div className="complexity-row">
@@ -22,7 +23,7 @@ export default function ComplexityControl({ value, onChange }: ComplexityControl
         />
       </div>
       <div className="complexity-ticks">
-        {COMPLEXITY_LABELS.map((label, index) => (
+        {COMPLEXITY_LABELS.slice(0, max).map((label, index) => (
           <span key={label} className={index + 1 === value ? 'active' : ''}>
             {index + 1}
           </span>
