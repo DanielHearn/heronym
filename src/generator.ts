@@ -1,4 +1,5 @@
-import { RACES, CLASSES, RACE_KEYS, CLASS_KEYS, type RaceKey, type ClassKey } from './data'
+import { THEMES } from './data'
+import type { LineageEntry, CallingEntry } from './data/types'
 
 export function pick(arr) {
   return arr[Math.floor(Math.random() * arr.length)]
@@ -24,7 +25,7 @@ function forgeSyllable(bank) {
 }
 
 export function syllableRange(bank, complexity) {
-  const offset = complexity - 3 // complexity 1..5, 3 is each race's natural baseline
+  const offset = complexity - 3 // complexity 1..5, 3 is each lineage's natural baseline
   const min = Math.max(1, bank.min + offset)
   const max = Math.min(8, Math.max(min, bank.max + offset))
   return [min, max]
@@ -60,15 +61,21 @@ type NameOptions = {
 }
 
 export function buildName(
-  raceKey: RaceKey | 'random',
-  classKey: ClassKey | 'random',
+  themeKey: string,
+  lineageKey: string,
+  callingKey: string | null,
   opts: NameOptions,
   complexity: number,
 ) {
-  const rKey = raceKey === 'random' ? pick(RACE_KEYS) : raceKey
-  const cKey = classKey === 'random' ? pick(CLASS_KEYS) : classKey
-  const race = RACES[rKey]
-  const cls = CLASSES[cKey]
+  const theme = THEMES[themeKey]
+
+  const lineageKeys = Object.keys(theme.lineage)
+  const lKey = lineageKey === 'random' ? pick(lineageKeys) : lineageKey
+  const lineage: LineageEntry = theme.lineage[lKey]
+
+  const callingKeys = theme.calling ? Object.keys(theme.calling) : []
+  const cKey = theme.calling ? (callingKey === 'random' || !callingKey ? pick(callingKeys) : callingKey) : null
+  const calling: CallingEntry | null = theme.calling && cKey ? theme.calling[cKey] : null
 
   let first: string | null = null
   let middle: string | null = null
@@ -77,27 +84,33 @@ export function buildName(
   const parts: string[] = []
 
   if (opts.first) {
-    first = forgePersonalName(race.syll, null, complexity)
+    first = forgePersonalName(lineage.syll, null, complexity)
     parts.push(first)
   }
   if (opts.middle) {
-    middle = forgePersonalName(race.syll, first, complexity)
+    middle = forgePersonalName(lineage.syll, first, complexity)
     parts.push(middle)
   }
   if (opts.surname) {
-    surname = forgeCompound(race.surname, complexity)
+    surname = forgeCompound(lineage.surname, complexity)
     parts.push(surname)
   }
 
   const base = parts.join(' ')
   let full
 
-  if (opts.title) {
-    title = forgeCompound(cls.title, complexity)
+  // Title only ever generates when the theme actually has a calling axis.
+  if (opts.title && calling) {
+    title = forgeCompound(calling.title, complexity)
     full = base ? `${base}, the ${title}` : `The ${title}`
   } else {
     full = base
   }
 
-  return { full: full || '', raceLabel: race.label, classLabel: cls.label, key: `${rKey}-${cKey}` }
+  return {
+    full: full || '',
+    lineageLabel: lineage.label,
+    callingLabel: calling ? calling.label : null,
+    key: `${lKey}-${cKey ?? 'none'}`,
+  }
 }

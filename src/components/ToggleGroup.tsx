@@ -3,14 +3,17 @@ type ToggleKey = 'first' | 'middle' | 'surname' | 'title'
 type ToggleGroupProps = {
   opts: Record<ToggleKey, boolean>
   onToggle: (key: ToggleKey) => void
+  // false for a theme with no `calling` axis — the Title toggle has
+  // nothing to draw from, so it's left out rather than shown disabled.
+  titleEnabled?: boolean
 }
 
-export default function ToggleGroup({ opts, onToggle }: ToggleGroupProps) {
+export default function ToggleGroup({ opts, onToggle, titleEnabled = true }: ToggleGroupProps) {
   const items: Array<{ key: ToggleKey; label: string }> = [
     { key: 'first', label: 'First name' },
     { key: 'middle', label: 'Middle name' },
     { key: 'surname', label: 'Surname' },
-    { key: 'title', label: 'Title' },
+    ...(titleEnabled ? [{ key: 'title' as ToggleKey, label: 'Title' }] : []),
   ]
 
   return (

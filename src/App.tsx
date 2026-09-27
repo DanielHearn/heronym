@@ -1,5 +1,5 @@
 import { useState, useMemo, useEffect } from 'react'
-import { RACES, CLASSES, RACE_KEYS, CLASS_KEYS, type RaceKey, type ClassKey } from './data'
+import { THEMES, THEME_KEYS } from './data'
 import { buildName, makeId } from './generator'
 import PinIcon from './components/PinIcon'
 import FieldSelect from './components/FieldSelect'
@@ -7,7 +7,9 @@ import ToggleGroup from './components/ToggleGroup'
 import ComplexityControl from './components/ComplexityControl'
 import Ledger, { type LedgerItem } from './components/Ledger'
 
-const PIN_STORAGE_KEY = 'heronym:pinned:v1'
+// Bumped: pinned-name shape changed (raceLabel/classLabel -> lineageLabel/
+// callingLabel), so old stored pins wouldn't match the new type anyway.
+const PIN_STORAGE_KEY = 'heronym:pinned:v2'
 
 type NameOptions = {
   first: boolean
@@ -19,13 +21,18 @@ type NameOptions = {
 type NameEntry = LedgerItem & {
   id: string
   full: string
-  raceLabel: string
-  classLabel: string
+  lineageLabel: string
+  callingLabel: string | null
 }
 
 export default function App() {
-  const [race, setRace] = useState<RaceKey | 'random'>('human')
-  const [cls, setCls] = useState<ClassKey | 'random'>('warrior')
+  const [theme, setTheme] = useState<string>('fantasy')
+  const themeData = THEMES[theme]
+  const lineageKeys = Object.keys(themeData.lineage)
+  const callingKeys = themeData.calling ? Object.keys(themeData.calling) : []
+
+  const [lineage, setLineage] = useState<string>('random')
+  const [calling, setCalling] = useState<string>('random')
   const [opts, setOpts] = useState<NameOptions>({
     first: true,
     middle: false,
@@ -58,9 +65,20 @@ export default function App() {
 
   useEffect(() => {
     generate()
-  }, [race, cls, opts, complexity])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [theme, lineage, calling, opts, complexity])
 
   const anySelected = opts.first || opts.middle || opts.surname || opts.title
+
+  function changeTheme(themeKey: string) {
+    const nextTheme = THEMES[themeKey]
+    setTheme(themeKey)
+    setLineage('random')
+    setCalling('random')
+    if (!nextTheme.calling) {
+      setOpts((o) => (o.title ? { ...o, title: false } : o))
+    }
+  }
 
   function toggle(key: keyof NameOptions) {
     setOpts((o) => ({ ...o, [key]: !o[key] }))
@@ -68,7 +86,10 @@ export default function App() {
 
   function generate() {
     if (!anySelected) return
-    const result: NameEntry = { ...buildName(race, cls, opts, complexity), id: makeId() }
+    const result: NameEntry = {
+      ...buildName(theme, lineage, themeData.calling ? calling : null, opts, complexity),
+      id: makeId(),
+    }
     setCurrent(result)
     setHistory((hist) => [result, ...hist].slice(0, 8))
     setReveal(false)
@@ -92,7 +113,9 @@ export default function App() {
 
   const kicker = useMemo(() => {
     if (!current) return 'a name awaits the forge'
-    return `${current.raceLabel} \u00B7 ${current.classLabel}`
+    return current.callingLabel
+      ? `${current.lineageLabel} \u00B7 ${current.callingLabel}`
+      : current.lineageLabel
   }, [current])
 
   return (
@@ -118,29 +141,39 @@ export default function App() {
 
           <div className={`options-content${optionsOpen ? '' : ' collapsed'}`}>
             <FieldSelect
-              id="race-select"
-              label="Race"
-              value={race}
-              options={[
-                ...RACE_KEYS.map((k) => ({ value: k, label: RACES[k].label })),
-                { value: 'random', label: 'Random' },
-              ]}
-              onChange={(e) => setRace(e.target.value as RaceKey | 'random')}
+              id="theme-select"
+              label="Theme"
+              value={theme}
+              options={THEME_KEYS.map((k) => ({ value: k, label: THEMES[k].label }))}
+              onChange={(e) => changeTheme(e.target.value)}
             />
 
             <FieldSelect
-              id="class-select"
-              label="Class"
-              value={cls}
+              id="lineage-select"
+              label={themeData.lineageLabel}
+              value={lineage}
               options={[
-                ...CLASS_KEYS.map((k) => ({ value: k, label: CLASSES[k].label })),
+                ...lineageKeys.map((k) => ({ value: k, label: themeData.lineage[k].label })),
                 { value: 'random', label: 'Random' },
               ]}
-              onChange={(e) => setCls(e.target.value as ClassKey | 'random')}
+              onChange={(e) => setLineage(e.target.value)}
             />
 
+            {themeData.calling && (
+              <FieldSelect
+                id="calling-select"
+                label={themeData.callingLabel ?? 'Calling'}
+                value={calling}
+                options={[
+                  ...callingKeys.map((k) => ({ value: k, label: themeData.calling![k].label })),
+                  { value: 'random', label: 'Random' },
+                ]}
+                onChange={(e) => setCalling(e.target.value)}
+              />
+            )}
+
             <h2 style={{ marginTop: '26px' }}>Name Parts</h2>
-            <ToggleGroup opts={opts} onToggle={toggle} />
+            <ToggleGroup opts={opts} onToggle={toggle} titleEnabled={!!themeData.calling} />
 
             <h2 style={{ marginTop: '26px' }}>Complexity</h2>
             <ComplexityControl value={complexity} max={3} onChange={setComplexity} />
