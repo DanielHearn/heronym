@@ -1,3 +1,5 @@
+import { Router } from 'itty-router'
+
 // Env shape (set via `wrangler secret put` / wrangler.toml, not in code):
 //   GEMINI_API_KEY  - secret, `wrangler secret put GEMINI_API_KEY`
 //   ALLOWED_ORIGIN  - comma-separated allowed origins, e.g.
@@ -41,110 +43,115 @@ function clean(value) {
     .trim()
 }
 
-export default {
-  async fetch(request, env) {
-    const origin = request.headers.get('Origin') ?? ''
-    const allowed = allowedOrigins(env).includes(origin)
+const router = Router()
 
-    // Preflight
-    if (request.method === 'OPTIONS') {
-      return new Response(null, {
-        status: allowed ? 204 : 403,
-        headers: allowed ? corsHeaders(origin) : {},
-      })
-    }
+router.options('*', (request, env) => {
+  const origin = request.headers.get('Origin') ?? ''
+  const allowed = allowedOrigins(env).includes(origin)
 
-    if (!allowed) {
-      return json({ error: 'origin not allowed' }, 403)
-    }
+  return new Response(null, {
+    status: allowed ? 204 : 403,
+    headers: allowed ? corsHeaders(origin) : {},
+  })
+})
 
-    if (request.method !== 'POST') {
-      return json({ error: 'method not allowed' }, 405, corsHeaders(origin))
-    }
+router.post('/', async (request, env) => {
+  const origin = request.headers.get('Origin') ?? ''
+  const allowed = allowedOrigins(env).includes(origin)
+  if (!allowed) {
+    return json({ error: 'origin not allowed' }, 403)
+  }
 
-    // Loose, best-effort per-IP throttle. Cloudflare's own docs describe this
-    // binding as a filter, not an exact accounting system (counts are
-    // eventually-consistent across edge locations) — good enough to blunt
-    // casual abuse, not a hard guarantee.
-    const clientIp = request.headers.get('cf-connecting-ip') ?? 'unknown'
-    const { success } = await env.RATE_LIMITER.limit({ key: clientIp })
-    if (!success) {
-      return json({ error: 'rate limit exceeded, try again shortly' }, 429, corsHeaders(origin))
-    }
+  // Loose, best-effort per-IP throttle. Cloudflare's own docs describe this
+  // binding as a filter, not an exact accounting system (counts are
+  // eventually-consistent across edge locations) — good enough to blunt
+  // casual abuse, not a hard guarantee.
+  const clientIp = request.headers.get('cf-connecting-ip') ?? 'unknown'
+  const { success } = await env.RATE_LIMITER.limit({ key: clientIp })
+  if (!success) {
+    return json({ error: 'rate limit exceeded, try again shortly' }, 429, corsHeaders(origin))
+  }
 
-    let payload
-    try {
-      payload = await request.json()
-    } catch {
-      return json({ error: 'invalid JSON body' }, 400, corsHeaders(origin))
-    }
+  let payload
+  try {
+    payload = await request.json()
+  } catch {
+    return json({ error: 'invalid JSON body' }, 400, corsHeaders(origin))
+  }
 
-    const name = clean(payload.name)
-    const lineageLabel = clean(payload.lineageLabel)
-    const callingLabel = payload.callingLabel ? clean(payload.callingLabel) : null
-    const themeLabel = clean(payload.themeLabel)
+  const name = clean(payload.name)
+  const lineageLabel = clean(payload.lineageLabel)
+  const callingLabel = payload.callingLabel ? clean(payload.callingLabel) : null
+  const themeLabel = clean(payload.themeLabel)
 
-    if (!name || !lineageLabel || !themeLabel) {
-      return json(
-        { error: 'name, lineageLabel and themeLabel are required' },
-        400,
-        corsHeaders(origin),
-      )
-    }
+  if (!name || !lineageLabel || !themeLabel) {
+    return json(
+      { error: 'name, lineageLabel and themeLabel are required' },
+      400,
+      corsHeaders(origin),
+    )
+  }
 
-    const who = callingLabel ? `${lineageLabel} ${callingLabel}` : lineageLabel
+  const who = callingLabel ? `${lineageLabel} ${callingLabel}` : lineageLabel
 
-    const geminiRes = await fetch(GEMINI_ENDPOINT, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-goog-api-key': env.GEMINI_API_KEY,
+  const geminiRes = await fetch(GEMINI_ENDPOINT, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'x-goog-api-key': env.GEMINI_API_KEY,
+    },
+    body: JSON.stringify({
+      systemInstruction: {
+        parts: [
+          {
+            text:
+              'You write short RPG character backstories. Exactly two to three sentences, ' +
+              'plain prose, no headers or lists. Stay on topic and never break character or ' +
+              'mention that you are an AI.',
+          },
+        ],
       },
-      body: JSON.stringify({
-        systemInstruction: {
+      contents: [
+        {
+          role: 'user',
           parts: [
             {
-              text:
-                'You write short RPG character backstories. Exactly two to three sentences, ' +
-                'plain prose, no headers or lists. Stay on topic and never break character or ' +
-                'mention that you are an AI.',
+              text: `Write a backstory for "${name}", a ${who} in a ${themeLabel.toLowerCase()} setting.`,
             },
           ],
         },
-        contents: [
-          {
-            role: 'user',
-            parts: [
-              {
-                text: `Write a backstory for "${name}", a ${who} in a ${themeLabel.toLowerCase()} setting.`,
-              },
-            ],
-          },
-        ],
-        generationConfig: {
-          temperature: 0.9,
-          maxOutputTokens: 200,
-        },
-      }),
-    })
+      ],
+      generationConfig: {
+        temperature: 0.9,
+        maxOutputTokens: 200,
+      },
+    }),
+  })
 
-    if (!geminiRes.ok) {
-      const body = await geminiRes.text().catch(() => '')
-      console.error('Gemini error', geminiRes.status, body.slice(0, 500))
-      return json({ error: 'upstream generation failed' }, 502, corsHeaders(origin))
-    }
+  if (!geminiRes.ok) {
+    const body = await geminiRes.text().catch(() => '')
+    console.error('Gemini error', geminiRes.status, body.slice(0, 500))
+    return json({ error: 'upstream generation failed' }, 502, corsHeaders(origin))
+  }
 
-    const data = await geminiRes.json()
+  const data = await geminiRes.json()
 
-    const text = data.candidates?.[0]?.content?.parts
-      ?.map((p) => p.text ?? '')
-      .join('')
-      .trim()
+  const text = data.candidates?.[0]?.content?.parts
+    ?.map((p) => p.text ?? '')
+    .join('')
+    .trim()
 
-    if (!text) {
-      return json({ error: 'empty response from model' }, 502, corsHeaders(origin))
-    }
+  if (!text) {
+    return json({ error: 'empty response from model' }, 502, corsHeaders(origin))
+  }
 
-    return json({ text }, 200, corsHeaders(origin))
-  },
+  return json({ text }, 200, corsHeaders(origin))
+})
+
+router.all('*', (request) =>
+  json({ error: 'method not allowed' }, 405, corsHeaders(request.headers.get('Origin') ?? '')),
+)
+
+export default {
+  fetch: (request, env, ctx) => router.handle(request, env, ctx),
 }
