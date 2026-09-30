@@ -5,5 +5,8 @@
   "type": "module",
   "dependencies": {
     "itty-router": "^5.0.24"
+  },
+  "devDependencies": {
+    "wrangler": "^4.145.0"
   }
 }
