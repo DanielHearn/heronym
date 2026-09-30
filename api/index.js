@@ -1,11 +1,8 @@
-export interface Env {
-  // Secret — set with `wrangler secret put GEMINI_API_KEY`, never in wrangler.toml.
-  GEMINI_API_KEY: string
-  // Comma-separated list of allowed origins, no trailing slash, e.g.
-  // "https://username.github.io,http://localhost:5173"
-  ALLOWED_ORIGIN: string
-  RATE_LIMITER: { limit: (opts: { key: string }) => Promise<{ success: boolean }> }
-}
+// Env shape (set via `wrangler secret put` / wrangler.toml, not in code):
+//   GEMINI_API_KEY  - secret, `wrangler secret put GEMINI_API_KEY`
+//   ALLOWED_ORIGIN  - comma-separated allowed origins, e.g.
+//                     "https://username.github.io,http://localhost:5173"
+//   RATE_LIMITER    - rate limit binding from wrangler.toml
 
 const MODEL = 'gemini-3.5-lite'
 const GEMINI_ENDPOINT = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent`
@@ -14,13 +11,13 @@ const GEMINI_ENDPOINT = `https://generativelanguage.googleapis.com/v1beta/models
 // used to smuggle an arbitrary long prompt through to Gemini.
 const MAX_FIELD_LENGTH = 80
 
-function allowedOrigins(env: Env): string[] {
+function allowedOrigins(env) {
   return env.ALLOWED_ORIGIN.split(',')
     .map((o) => o.trim())
     .filter(Boolean)
 }
 
-function corsHeaders(origin: string): Record<string, string> {
+function corsHeaders(origin) {
   return {
     'Access-Control-Allow-Origin': origin,
     'Access-Control-Allow-Methods': 'POST, OPTIONS',
@@ -29,14 +26,14 @@ function corsHeaders(origin: string): Record<string, string> {
   }
 }
 
-function json(body: unknown, status: number, headers: Record<string, string> = {}): Response {
+function json(body, status, headers = {}) {
   return new Response(JSON.stringify(body), {
     status,
     headers: { 'Content-Type': 'application/json', ...headers },
   })
 }
 
-function clean(value: unknown): string {
+function clean(value) {
   if (typeof value !== 'string') return ''
   return value
     .slice(0, MAX_FIELD_LENGTH)
@@ -45,7 +42,7 @@ function clean(value: unknown): string {
 }
 
 export default {
-  async fetch(request: Request, env: Env): Promise<Response> {
+  async fetch(request, env) {
     const origin = request.headers.get('Origin') ?? ''
     const allowed = allowedOrigins(env).includes(origin)
 
@@ -75,7 +72,7 @@ export default {
       return json({ error: 'rate limit exceeded, try again shortly' }, 429, corsHeaders(origin))
     }
 
-    let payload: Record<string, unknown>
+    let payload
     try {
       payload = await request.json()
     } catch {
@@ -137,9 +134,7 @@ export default {
       return json({ error: 'upstream generation failed' }, 502, corsHeaders(origin))
     }
 
-    const data: {
-      candidates?: Array<{ content?: { parts?: Array<{ text?: string }> } }>
-    } = await geminiRes.json()
+    const data = await geminiRes.json()
 
     const text = data.candidates?.[0]?.content?.parts
       ?.map((p) => p.text ?? '')
@@ -152,4 +147,4 @@ export default {
 
     return json({ text }, 200, corsHeaders(origin))
   },
-} satisfies ExportedHandler<Env>
+}
