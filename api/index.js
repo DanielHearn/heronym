@@ -1,4 +1,5 @@
 import { Router } from 'itty-router'
+import { env } from 'cloudflare:workers'
 
 // Env shape (set via `wrangler secret put` / wrangler.toml, not in code):
 //   GEMINI_API_KEY  - secret, `wrangler secret put GEMINI_API_KEY`
