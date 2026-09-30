@@ -124,7 +124,7 @@ router.post('/', async (request, env) => {
       ],
       generationConfig: {
         temperature: 0.9,
-        maxOutputTokens: 200,
+        maxOutputTokens: 6000,
       },
     }),
   })
