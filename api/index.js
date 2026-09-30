@@ -7,7 +7,7 @@ import { env } from 'cloudflare:workers'
 //                     "https://username.github.io,http://localhost:5173"
 //   RATE_LIMITER    - rate limit binding from wrangler.toml
 
-const MODEL = 'gemini-3.5-lite'
+const MODEL = 'gemini-3.5-flash'
 const GEMINI_ENDPOINT = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent`
 
 // Keeps request bodies small and strips newlines, so this endpoint can't be
