@@ -153,5 +153,5 @@ router.all('*', (request) =>
 )
 
 export default {
-  fetch: (request, env, ctx) => router.handle(request, env, ctx),
+  fetch: (request, env, ctx) => router.fetch(request, env, ctx),
 }
