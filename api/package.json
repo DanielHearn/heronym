@@ -3,6 +3,9 @@
   "private": true,
   "version": "1.0.0",
   "type": "module",
+  "scripts": {
+    "install": "npm ci --ignore-scripts"
+  },
   "dependencies": {
     "itty-router": "^5.0.24"
   },

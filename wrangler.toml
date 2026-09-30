@@ -2,6 +2,10 @@ name = "heronym"
 main = "api/index.js"
 compatibility_date = "2026-09-01"
 
+[build]
+command = "npm run install"
+cwd = "api"
+
 [vars]
 # Comma-separated, no trailing slash. Add every origin that should be able
 # to call this worker — your GitHub Pages domain and localhost for dev.
