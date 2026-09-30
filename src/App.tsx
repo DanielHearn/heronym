@@ -5,6 +5,7 @@ import PinIcon from './components/PinIcon'
 import FieldSelect from './components/FieldSelect'
 import ToggleGroup from './components/ToggleGroup'
 import ComplexityControl from './components/ComplexityControl'
+import Backstory from './components/Backstory'
 import Ledger, { type LedgerItem } from './components/Ledger'
 
 // Bumped: pinned-name shape changed (raceLabel/classLabel -> lineageLabel/
@@ -63,22 +64,25 @@ export default function App() {
     }
   }, [pinned])
 
+  // Switching theme: lineage/calling keys aren't shared across themes, so
+  // reset both to "random". If the new theme has no calling axis at all,
+  // also drop a stale Title toggle rather than leave it checked with
+  // nothing behind it.
+  useEffect(() => {
+    setLineage('random')
+    setCalling('random')
+    if (!themeData.calling) {
+      setOpts((o) => (o.title ? { ...o, title: false } : o))
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [theme])
+
   useEffect(() => {
     generate()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [theme, lineage, calling, opts, complexity])
 
   const anySelected = opts.first || opts.middle || opts.surname || opts.title
-
-  function changeTheme(themeKey: string) {
-    const nextTheme = THEMES[themeKey]
-    setTheme(themeKey)
-    setLineage('random')
-    setCalling('random')
-    if (!nextTheme.calling) {
-      setOpts((o) => (o.title ? { ...o, title: false } : o))
-    }
-  }
 
   function toggle(key: keyof NameOptions) {
     setOpts((o) => ({ ...o, [key]: !o[key] }))
@@ -145,7 +149,7 @@ export default function App() {
               label="Theme"
               value={theme}
               options={THEME_KEYS.map((k) => ({ value: k, label: THEMES[k].label }))}
-              onChange={(e) => changeTheme(e.target.value)}
+              onChange={(e) => setTheme(e.target.value)}
             />
 
             <FieldSelect
@@ -215,6 +219,16 @@ export default function App() {
               Generate
             </button>
           </div>
+
+          {current && current.full && (
+            <Backstory
+              key={current.id}
+              name={current.full}
+              lineageLabel={current.lineageLabel}
+              callingLabel={current.callingLabel}
+              themeLabel={themeData.label}
+            />
+          )}
 
           <Ledger
             title="Recently Generated"

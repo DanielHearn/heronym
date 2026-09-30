@@ -485,6 +485,69 @@ select {
   }
 }
 
+.backstory {
+  margin-top: 30px;
+  width: 100%;
+  text-align: center;
+}
+
+.backstory-btn {
+  background: transparent;
+  border: 1px solid @gold;
+  color: @gold-bright;
+  font-family: 'Cinzel', serif;
+  font-size: 0.85rem;
+  letter-spacing: 0.04em;
+  padding: 10px 22px;
+  cursor: pointer;
+  transition:
+    border-color 0.15s ease,
+    background 0.15s ease;
+
+  &:hover {
+    border-color: @gold-bright;
+    background: rgba(217, 172, 78, 0.08);
+  }
+
+  &:focus-visible {
+    outline: 2px solid @gold-bright;
+    outline-offset: 2px;
+  }
+
+  @media (max-width: 760px) {
+    min-height: 44px;
+    padding: 10px 26px;
+  }
+}
+
+.backstory-btn-small {
+  font-size: 0.78rem;
+  padding: 7px 18px;
+  margin-top: 14px;
+}
+
+.backstory-hint {
+  color: @text-muted;
+  font-size: 0.85rem;
+  margin: 10px 0 0;
+  line-height: 1.4;
+}
+
+.backstory-text {
+  max-width: 480px;
+  margin: 0 auto;
+  color: @text-light;
+  font-size: 1.02rem;
+  line-height: 1.6;
+  font-style: italic;
+  text-align: left;
+}
+
+.backstory-error {
+  color: @wax-bright;
+  font-size: 0.9rem;
+}
+
 .ledger {
   margin-top: 34px;
   width: 100%;

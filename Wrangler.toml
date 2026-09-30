@@ -1,0 +1,20 @@
+name = "heronym-backstory"
+main = "src/api.ts"
+compatibility_date = "2026-09-01"
+
+[vars]
+# Comma-separated, no trailing slash. Add every origin that should be able
+# to call this worker — your GitHub Pages domain and localhost for dev.
+ALLOWED_ORIGIN = "https://www.danielhearn.co.uk,http://localhost:5173"
+
+# GEMINI_API_KEY is NOT set here — it's a secret, set with:
+#   wrangler secret put GEMINI_API_KEY
+# Committing it to this file would defeat the entire point of the proxy.
+
+[[ratelimits]]
+name = "RATE_LIMITER"
+namespace_id = "1001"
+
+  [ratelimits.simple]
+  limit = 15
+  period = 60
