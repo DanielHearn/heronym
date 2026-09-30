@@ -1,6 +1,4 @@
 import { useEffect, useRef, useState } from 'react'
-import { generateBackstory, isConfigured } from '../gemini'
-
 type BackstoryProps = {
   name: string
   lineageLabel: string
@@ -8,7 +6,9 @@ type BackstoryProps = {
   themeLabel: string
 }
 
-type Status = 'idle' | 'loading' | 'done' | 'error' | 'unconfigured'
+type Status = 'idle' | 'loading' | 'done' | 'error'
+
+const BACKSTORY_API = 'https://heronym.hearndaniel.workers.dev/'
 
 export default function Backstory({
   name,
@@ -16,7 +16,7 @@ export default function Backstory({
   callingLabel,
   themeLabel,
 }: BackstoryProps) {
-  const [status, setStatus] = useState<Status>(() => (isConfigured() ? 'idle' : 'unconfigured'))
+  const [status, setStatus] = useState<Status>('idle')
   const [text, setText] = useState('')
   const [error, setError] = useState('')
 
@@ -38,8 +38,19 @@ export default function Backstory({
     setError('')
 
     try {
-      const result = await generateBackstory({ name, lineageLabel, callingLabel, themeLabel })
-      setText(result)
+      const response = await fetch(BACKSTORY_API, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, lineageLabel, callingLabel, themeLabel }),
+      })
+      const data = await response.json()
+      if (!response.ok) {
+        throw new Error(data?.error || `Backstory request failed (${response.status})`)
+      }
+      if (typeof data?.text !== 'string' || !data.text.trim()) {
+        throw new Error('Backstory API returned an empty response.')
+      }
+      setText(data.text.trim())
       setStatus('done')
     } catch (err) {
       console.error(err)
