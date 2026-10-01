@@ -1,3 +1,5 @@
+import './ComplexityControl.less'
+
 const COMPLEXITY_LABELS = ['Low', 'Medium', 'High'] as const
 
 type ComplexityControlProps = {

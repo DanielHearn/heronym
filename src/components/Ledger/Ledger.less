@@ -1,0 +1,105 @@
+@import '../../styles/variables.less';
+
+.ledger {
+  margin-top: 34px;
+  width: 100%;
+
+  h3 {
+    font-family: 'Cinzel', serif;
+    font-size: 0.85rem;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    color: @text-muted;
+    margin: 0 0 10px;
+    text-align: left;
+  }
+}
+
+.ledger-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid #3a2c1a;
+
+  li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 2px;
+    border-bottom: 1px solid #3a2c1a;
+    font-size: 0.98rem;
+  }
+
+  .lname {
+    color: @text-light;
+    flex: 1 1 auto;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .ltag {
+    color: @text-dim;
+    font-size: 0.85rem;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  @media (max-width: 520px) {
+    li {
+      gap: 8px;
+      align-items: flex-start;
+    }
+
+    .lname {
+      white-space: normal;
+      overflow-wrap: anywhere;
+      line-height: 1.25;
+    }
+
+    .ltag {
+      display: none;
+    }
+  }
+}
+
+.empty-ledger {
+  color: @text-dim;
+  font-size: 0.9rem;
+  padding: 10px 2px;
+}
+
+.pinned-ledger {
+  margin-top: 24px;
+}
+
+.row-pin {
+  flex-shrink: 0;
+  background: transparent;
+  border: none;
+  color: @text-dim;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+
+  svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  &:hover {
+    color: @gold-bright;
+  }
+
+  &.pinned {
+    color: @wax-bright;
+  }
+
+  &:focus-visible {
+    outline: 2px solid @gold-bright;
+    outline-offset: 2px;
+  }
+}

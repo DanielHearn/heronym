@@ -1,3 +1,5 @@
+import './FieldSelect.less'
+
 type FieldSelectOption = {
   value: string
   label: string

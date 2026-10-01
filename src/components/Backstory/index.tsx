@@ -1,4 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
+import './Backstory.less'
+
 type BackstoryProps = {
   name: string
   lineageLabel: string

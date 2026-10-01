@@ -1,4 +1,5 @@
-import PinIcon from './PinIcon'
+import PinIcon from '../PinIcon'
+import './Ledger.less'
 
 export type LedgerItem = {
   id: string

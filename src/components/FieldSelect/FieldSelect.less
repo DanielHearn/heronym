@@ -1,0 +1,22 @@
+@import '../../styles/variables.less';
+@import '../../styles/field.less';
+
+select {
+  width: 100%;
+  background: @ink-2;
+  border: 1px solid #4a3a24;
+  color: @text-light;
+  font-family: 'EB Garamond', serif;
+  font-size: 1.05rem;
+  padding: 9px 10px;
+  outline: none;
+
+  &:focus-visible {
+    border-color: @gold-bright;
+    box-shadow: 0 0 0 2px rgba(217, 172, 78, 0.25);
+  }
+
+  @media (max-width: 760px) {
+    min-height: 44px;
+  }
+}

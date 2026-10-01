@@ -1,4 +1,8 @@
-export default function PinIcon({ filled }) {
+type PinIconProps = {
+  filled: boolean
+}
+
+export default function PinIcon({ filled }: PinIconProps) {
   return (
     <svg viewBox="0 0 24 24" width={14} height={14} aria-hidden="true">
       <path

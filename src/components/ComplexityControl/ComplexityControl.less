@@ -1,0 +1,71 @@
+@import '../../styles/variables.less';
+@import '../../styles/field.less';
+
+.complexity-row {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  gap: 14px;
+}
+
+.complexity-slider {
+  flex: 1 1 auto;
+  appearance: none;
+  -webkit-appearance: none;
+  height: 4px;
+  background: linear-gradient(90deg, @gold, #4a3a24);
+  outline: none;
+  cursor: pointer;
+  width: 100%;
+
+  &::-webkit-slider-thumb {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, @wax-bright, @wax 70%, #4e1414 100%);
+    border: 1.5px solid @gold-bright;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+  }
+
+  &::-moz-range-thumb {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, @wax-bright, @wax 70%, #4e1414 100%);
+    border: 1.5px solid @gold-bright;
+    cursor: pointer;
+  }
+
+  &:focus-visible {
+    box-shadow: 0 0 0 2px rgba(217, 172, 78, 0.35);
+  }
+}
+
+.complexity-value {
+  font-family: 'Cinzel', serif;
+  font-size: 0.85rem;
+  color: @gold-bright;
+  white-space: nowrap;
+}
+
+.complexity-ticks {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 6px;
+  padding: 0 1px;
+
+  span {
+    font-size: 0.78rem;
+    color: @text-dim;
+    width: 18px;
+    text-align: center;
+
+    &.active {
+      color: @gold-bright;
+    }
+  }
+}

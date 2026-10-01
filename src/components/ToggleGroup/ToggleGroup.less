@@ -1,0 +1,66 @@
+@import '../../styles/variables.less';
+
+.toggles {
+  display: flex;
+  flex-direction: column;
+  gap: 0px;
+  margin-top: 4px;
+}
+
+.toggle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  padding: 8px 8px 8px 0;
+  border: 1px solid transparent;
+
+  @media (max-width: 760px) {
+    min-height: 44px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+
+  &:hover {
+    border-color: #4a3a24;
+  }
+
+  input {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 17px;
+    height: 17px;
+    border: 1.5px solid @gold;
+    background: @ink-2;
+    display: inline-block;
+    position: relative;
+    cursor: pointer;
+    flex-shrink: 0;
+
+    &:checked {
+      background: @wax;
+      border-color: @gold-bright;
+
+      &::after {
+        content: '';
+        position: absolute;
+        left: 4.5px;
+        top: 1px;
+        width: 4px;
+        height: 8px;
+        border: solid @parchment;
+        border-width: 0 2px 2px 0;
+        transform: rotate(40deg);
+      }
+    }
+
+    &:focus-visible {
+      box-shadow: 0 0 0 2px rgba(217, 172, 78, 0.35);
+    }
+  }
+
+  span {
+    color: @text-light;
+    font-size: 1.02rem;
+  }
+}

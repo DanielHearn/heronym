@@ -1,3 +1,5 @@
+import './ToggleGroup.less'
+
 type ToggleKey = 'first' | 'middle' | 'surname' | 'title'
 
 type ToggleGroupProps = {

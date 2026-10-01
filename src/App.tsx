@@ -7,6 +7,7 @@ import ToggleGroup from './components/ToggleGroup'
 import ComplexityControl from './components/ComplexityControl'
 import Backstory from './components/Backstory'
 import Ledger, { type LedgerItem } from './components/Ledger'
+import './App.less'
 
 // Bumped: pinned-name shape changed (raceLabel/classLabel -> lineageLabel/
 // callingLabel), so old stored pins wouldn't match the new type anyway.
