@@ -65,7 +65,7 @@ export default function Backstory({
     <div className="backstory">
       {status === 'idle' && (
         <button type="button" className="backstory-btn" onClick={generate}>
-          Generate a backstory
+          Generate backstory
         </button>
       )}
 
