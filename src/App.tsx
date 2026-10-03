@@ -133,7 +133,7 @@ export default function App() {
       <div className="layout">
         <div className="panel">
           <div className="panel-heading">
-            <h2>Lineage &amp; Calling</h2>
+            <h2>Settings</h2>
             <button
               className="options-toggle"
               type="button"
