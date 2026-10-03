@@ -132,6 +132,28 @@ router.post('/', async (request, env) => {
   if (!geminiRes.ok) {
     const body = await geminiRes.text().catch(() => '')
     console.error('Gemini error', geminiRes.status, body.slice(0, 500))
+    let errorDetails = ''
+    try {
+      const parsedBody = JSON.parse(body)
+      errorDetails = JSON.stringify(parsedBody.error ?? parsedBody).toLowerCase()
+    } catch {
+      errorDetails = body.toLowerCase()
+    }
+
+    const isRateLimited =
+      geminiRes.status === 429 ||
+      /resource_exhausted|rate_limit_exceeded|quota_exceeded|rate.?limit|too many requests|quota/i.test(
+        errorDetails,
+      )
+    if (isRateLimited) {
+      return json(
+        {
+          error: 'Backstory generation is temporarily rate-limited. Please try again shortly.',
+        },
+        429,
+        corsHeaders(origin),
+      )
+    }
     return json({ error: 'upstream generation failed' }, 502, corsHeaders(origin))
   }
 

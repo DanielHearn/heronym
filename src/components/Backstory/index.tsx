@@ -135,7 +135,7 @@ export default function Backstory({
       setStatus('done')
     } catch (err) {
       console.error(err)
-      setError('Error generating backstory')
+      setError(err instanceof Error ? err.message : 'Error generating backstory')
       setStatus('error')
     }
   }
