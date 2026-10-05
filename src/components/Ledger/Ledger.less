@@ -32,11 +32,50 @@
 
   .lname {
     color: @text-light;
+    font: inherit;
+    text-align: left;
     flex: 1 1 auto;
+    min-width: 0;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+
+    &:hover {
+      color: @gold-bright;
+    }
+
+    &:focus-visible {
+      outline: 2px solid @gold-bright;
+      outline-offset: 2px;
+    }
+  }
+
+  .lname-text {
     min-width: 0;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    margin-right: 1em;
+  }
+
+  .load-hint {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    flex-shrink: 0;
+    color: @gold-bright;
+    font-size: 0.82rem;
+    letter-spacing: 0.02em;
+
+    svg {
+      width: 16px;
+      height: 16px;
+    }
   }
 
   .ltag {
@@ -52,7 +91,7 @@
       align-items: flex-start;
     }
 
-    .lname {
+    .lname-text {
       white-space: normal;
       overflow-wrap: anywhere;
       line-height: 1.25;
@@ -79,6 +118,7 @@
   width: 32px;
   height: 32px;
   padding: 0;
+  margin-left: 2em;
   border: 1.5px solid @gold-bright;
   border-radius: 50%;
   background: @wax;

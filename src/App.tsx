@@ -20,12 +20,7 @@ type NameOptions = {
   title: boolean
 }
 
-type NameEntry = LedgerItem & {
-  id: string
-  full: string
-  lineageLabel: string
-  callingLabel: string | null
-}
+type NameEntry = LedgerItem
 
 export default function App() {
   const [theme, setTheme] = useState<string>('fantasy')
@@ -94,6 +89,7 @@ export default function App() {
     const result: NameEntry = {
       ...buildName(theme, lineage, themeData.calling ? calling : null, opts, complexity),
       id: makeId(),
+      themeLabel: themeData.label,
     }
     setCurrent(result)
     setHistory((hist) => [result, ...hist].slice(0, 8))
@@ -109,11 +105,17 @@ export default function App() {
     setPinned((p) =>
       p.some((x) => x.id === item.id)
         ? p.filter((x) => x.id !== item.id)
-        : [item as NameEntry, ...p],
+        : [item, ...p],
     )
   }
   function unpin(id: string) {
     setPinned((p) => p.filter((x) => x.id !== id))
+  }
+
+  function loadName(item: LedgerItem) {
+    setCurrent(item)
+    setReveal(false)
+    requestAnimationFrame(() => setReveal(true))
   }
 
   const kicker = useMemo(() => {
@@ -227,7 +229,7 @@ export default function App() {
               name={current.full}
               lineageLabel={current.lineageLabel}
               callingLabel={current.callingLabel}
-              themeLabel={themeData.label}
+              themeLabel={current.themeLabel ?? themeData.label}
             />
           )}
 
@@ -235,6 +237,7 @@ export default function App() {
             title="Recently Generated"
             items={history}
             isPinned={isPinned}
+            onSelect={loadName}
             onTogglePin={togglePin}
             emptyText="Names you generate will be recorded here"
             maxItems={isMobile ? 4 : 6}
@@ -244,6 +247,7 @@ export default function App() {
             title="Pinned"
             items={pinned}
             isPinned={isPinned}
+            onSelect={loadName}
             onUnpin={unpin}
             emptyText="Pin a name to keep it safe"
             className="pinned-ledger"

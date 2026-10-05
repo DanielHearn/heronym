@@ -4,14 +4,16 @@ import './Ledger.less'
 export type LedgerItem = {
   id: string
   full: string
-  raceLabel: string
-  classLabel: string
+  lineageLabel: string
+  callingLabel: string | null
+  themeLabel?: string
 }
 
 type LedgerProps = {
   title: string
   items: LedgerItem[]
   isPinned: (id: string) => boolean
+  onSelect: (item: LedgerItem) => void
   onTogglePin?: (item: LedgerItem) => void
   onUnpin?: (id: string) => void
   emptyText: string
@@ -23,6 +25,7 @@ export default function Ledger({
   title,
   items,
   isPinned,
+  onSelect,
   onTogglePin,
   onUnpin,
   emptyText,
@@ -42,10 +45,37 @@ export default function Ledger({
 
             return (
               <li key={item.id}>
-                <span className="lname">{item.full || '(empty)'}</span>
-                <span className="ltag">
-                  {item.raceLabel} {item.classLabel}
-                </span>
+                <button
+                  className="lname"
+                  type="button"
+                  onClick={() => onSelect(item)}
+                  aria-label={`Load ${item.full} into the name display`}
+                  title={`Load ${item.full}`}
+                >
+                  <div>
+                    <span className="lname-text">{item.full || '(empty)'}</span>
+                    <span className="ltag">
+                      {item.callingLabel
+                        ? `${item.lineageLabel} · ${item.callingLabel}`
+                        : item.lineageLabel}
+                    </span>
+                  </div>
+
+                  <span className="load-hint" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" focusable="false">
+                      <path
+                        d="M14 4h5v16h-5M3 12h11m-4-4 4 4-4 4"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="1.8"
+                      />
+                    </svg>
+                    Load
+                  </span>
+                </button>
+
                 <button
                   className={`row-pin${pinned ? ' pinned' : ''}`}
                   onClick={handlePinClick}
