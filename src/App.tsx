@@ -237,7 +237,7 @@ export default function App() {
             isPinned={isPinned}
             onTogglePin={togglePin}
             emptyText="Names you generate will be recorded here"
-            maxItems={isMobile ? 4 : 8}
+            maxItems={isMobile ? 4 : 6}
           />
 
           <Ledger
