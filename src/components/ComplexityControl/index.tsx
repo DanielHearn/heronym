@@ -26,7 +26,11 @@ export default function ComplexityControl({ value, max, onChange }: ComplexityCo
       </div>
       <div className="complexity-ticks">
         {COMPLEXITY_LABELS.slice(0, max).map((label, index) => (
-          <span key={label} className={index + 1 === value ? 'active' : ''}>
+          <span
+            key={label}
+            className={index + 1 === value ? 'active' : ''}
+            onClick={() => onChange(index + 1)}
+          >
             {index + 1}
           </span>
         ))}

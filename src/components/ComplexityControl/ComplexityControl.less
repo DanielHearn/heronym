@@ -7,13 +7,14 @@
   align-items: center;
   width: 100%;
   gap: 14px;
+  user-select: none;
 }
 
 .complexity-slider {
   flex: 1 1 auto;
   appearance: none;
   -webkit-appearance: none;
-  height: 4px;
+  height: 8px;
   background: linear-gradient(90deg, @gold, #4a3a24);
   outline: none;
   cursor: pointer;
@@ -63,6 +64,7 @@
     color: @text-dim;
     width: 18px;
     text-align: center;
+    cursor: pointer;
 
     &.active {
       color: @gold-bright;
