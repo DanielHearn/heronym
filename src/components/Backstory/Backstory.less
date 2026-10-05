@@ -1,9 +1,74 @@
 @import '../../styles/variables.less';
 
-.backstory {
+.backstory-panel {
   margin-top: 30px;
   width: 100%;
+  padding: 18px 22px;
+  background: linear-gradient(180deg, #241b12, #1e160f);
+  border: 1px solid #3a2c1a;
+  box-sizing: border-box;
+}
+
+.backstory-panel-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+
+  h2 {
+    font-family: 'Cinzel', serif;
+    font-size: 0.95rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    color: @gold-bright;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    &::before {
+      content: '';
+      width: 8px;
+      height: 8px;
+      background: @wax-bright;
+      transform: rotate(45deg);
+      display: inline-block;
+      flex-shrink: 0;
+    }
+  }
+}
+
+.backstory-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40px;
+  padding: 7px 10px;
+  border: 1px solid #4a3a24;
+  background: transparent;
+  color: @gold-bright;
+  font-family: 'EB Garamond', serif;
+  font-size: 0.9rem;
+  cursor: pointer;
+
+  &:hover,
+  &:focus-visible {
+    border-color: @gold-bright;
+  }
+
+  &:focus-visible {
+    outline: 2px solid rgba(217, 172, 78, 0.35);
+    outline-offset: 2px;
+  }
+}
+
+.backstory-content {
+  margin-top: 18px;
   text-align: center;
+
+  &[hidden] {
+    display: none;
+  }
 }
 
 .backstory-btn {

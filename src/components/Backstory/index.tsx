@@ -72,6 +72,7 @@ export default function Backstory({
   callingLabel,
   themeLabel,
 }: BackstoryProps) {
+  const [panelOpen, setPanelOpen] = useState(true)
   const [status, setStatus] = useState<Status>('idle')
   const [text, setText] = useState('')
   const [error, setError] = useState('')
@@ -141,33 +142,48 @@ export default function Backstory({
   }
 
   return (
-    <div className="backstory">
-      {status === 'idle' && (
-        <button type="button" className="backstory-btn" onClick={generate}>
-          Generate backstory
+    <div className="backstory-panel">
+      <div className="backstory-panel-heading">
+        <h2>Backstory</h2>
+        <button
+          type="button"
+          className="backstory-toggle"
+          aria-expanded={panelOpen}
+          aria-controls="backstory-content"
+          onClick={() => setPanelOpen((open) => !open)}
+        >
+          {panelOpen ? 'Hide' : 'Show'}
         </button>
-      )}
+      </div>
 
-      {status === 'loading' && <p className="backstory-hint">Generating backstory</p>}
+      <div id="backstory-content" className="backstory-content" hidden={!panelOpen}>
+        {status === 'idle' && (
+          <button type="button" className="backstory-btn" onClick={generate}>
+            Generate backstory
+          </button>
+        )}
 
-      {status === 'done' && <p className="backstory-text">{text}</p>}
+        {status === 'loading' && <p className="backstory-hint">Generating backstory</p>}
 
-      {retryAt !== null && retrySeconds > 0 && (
-        <p className="backstory-error">
-          You can generate up to {BACKSTORY_REQUEST_LIMIT} backstories per minute. Try again in{' '}
-          {retrySeconds} {retrySeconds === 1 ? 'second' : 'seconds'}.
-        </p>
-      )}
+        {status === 'done' && <p className="backstory-text">{text}</p>}
 
-      {status === 'error' && retryAt === null && error && (
-        <p className="backstory-error">{error}</p>
-      )}
+        {retryAt !== null && retrySeconds > 0 && (
+          <p className="backstory-error">
+            You can generate up to {BACKSTORY_REQUEST_LIMIT} backstories per minute. Try again in{' '}
+            {retrySeconds} {retrySeconds === 1 ? 'second' : 'seconds'}.
+          </p>
+        )}
 
-      {(status === 'done' || status === 'error') && (
-        <button type="button" className="backstory-btn backstory-btn-small" onClick={generate}>
-          Regenerate Backstory
-        </button>
-      )}
+        {status === 'error' && retryAt === null && error && (
+          <p className="backstory-error">{error}</p>
+        )}
+
+        {(status === 'done' || status === 'error') && (
+          <button type="button" className="backstory-btn backstory-btn-small" onClick={generate}>
+            Regenerate Backstory
+          </button>
+        )}
+      </div>
     </div>
   )
 }
