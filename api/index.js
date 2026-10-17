@@ -79,7 +79,6 @@ router.post('/', async (request, env) => {
   } catch {
     return json({ error: 'invalid JSON body' }, 400, corsHeaders(origin))
   }
-
   const name = clean(payload.name)
   const lineageLabel = clean(payload.lineageLabel)
   const callingLabel = payload.callingLabel ? clean(payload.callingLabel) : null

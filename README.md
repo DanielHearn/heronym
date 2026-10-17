@@ -1,9 +1,8 @@
 # Heronym
 
 A procedural RPG character name generator, built with React + Vite. Names are
-assembled at generation time from race-themed syllable/compound fragments
-rather than picked from fixed lists, with a complexity slider and a
-localStorage-backed "pinned names" list.
+assembled at generation time from theme-based syllable/compound fragments
+rather than picked from fixed lists.
 
 ## Local development
 

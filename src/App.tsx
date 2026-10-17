@@ -6,6 +6,7 @@ import FieldSelect from './components/FieldSelect'
 import ToggleGroup from './components/ToggleGroup'
 import ComplexityControl from './components/ComplexityControl'
 import Backstory from './components/Backstory'
+import FamilyTree from './components/FamilyTree'
 import Ledger, { type LedgerItem } from './components/Ledger'
 import './App.less'
 
@@ -124,6 +125,18 @@ export default function App() {
       ? `${current.lineageLabel} \u00B7 ${current.callingLabel}`
       : current.lineageLabel
   }, [current])
+  const familyThemeKey =
+    Object.keys(THEMES).find((key) => THEMES[key].label === current?.themeLabel) ?? theme
+  const familyTheme = THEMES[familyThemeKey]
+  const familyLineageKey =
+    Object.keys(familyTheme.lineage).find(
+      (key) => familyTheme.lineage[key].label === current?.lineageLabel,
+    ) ?? Object.keys(familyTheme.lineage)[0]
+  const familyCallingKey = familyTheme.calling
+    ? Object.keys(familyTheme.calling).find(
+        (key) => familyTheme.calling?.[key].label === current?.callingLabel,
+      ) ?? null
+    : null
 
   return (
     <div className="wrap">
@@ -224,13 +237,26 @@ export default function App() {
           </div>
 
           {current && current.full && (
-            <Backstory
-              key={current.id}
-              name={current.full}
-              lineageLabel={current.lineageLabel}
-              callingLabel={current.callingLabel}
-              themeLabel={current.themeLabel ?? themeData.label}
-            />
+            <>
+              <Backstory
+                key={`backstory-${current.id}`}
+                name={current.full}
+                lineageLabel={current.lineageLabel}
+                callingLabel={current.callingLabel}
+                themeLabel={current.themeLabel ?? themeData.label}
+              />
+              <FamilyTree
+                key={`family-tree-${current.id}`}
+                name={current.full}
+                lineageLabel={current.lineageLabel}
+                callingLabel={current.callingLabel}
+                themeLabel={current.themeLabel ?? themeData.label}
+                themeKey={familyThemeKey}
+                lineageKey={familyLineageKey}
+                callingKey={familyCallingKey}
+                complexity={complexity}
+              />
+            </>
           )}
 
           <Ledger
