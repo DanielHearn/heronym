@@ -89,15 +89,33 @@ export default function App() {
 
   function generate() {
     if (!anySelected) return
-    const result: NameEntry = {
-      ...buildName(
+    const hasUnlockedPart =
+      (opts.first && !lockedParts.first) ||
+      (opts.middle && !lockedParts.middle) ||
+      (opts.surname && !lockedParts.surname) ||
+      (opts.title && !!themeData.calling && !lockedParts.title)
+    if (!hasUnlockedPart && current?.full) return
+
+    let generated = buildName(
+      theme,
+      lineage,
+      themeData.calling ? calling : null,
+      opts,
+      complexity,
+      lockedParts,
+    )
+    while (generated.full === current?.full) {
+      generated = buildName(
         theme,
         lineage,
         themeData.calling ? calling : null,
         opts,
         complexity,
         lockedParts,
-      ),
+      )
+    }
+    const result: NameEntry = {
+      ...generated,
       id: makeId(),
       themeLabel: themeData.label,
     }
