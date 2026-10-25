@@ -1,7 +1,8 @@
 import { useState, useMemo, useEffect } from 'react'
 import { THEMES, THEME_KEYS } from './data'
-import { buildName, makeId } from './generator'
+import { buildName, makeId, type LockedNameParts, type NamePartKey } from './generator'
 import PinIcon from './components/PinIcon'
+import LockIcon from './components/LockIcon'
 import FieldSelect from './components/FieldSelect'
 import ToggleGroup from './components/ToggleGroup'
 import ComplexityControl from './components/ComplexityControl'
@@ -49,6 +50,7 @@ export default function App() {
     }
   })
   const [reveal, setReveal] = useState(false)
+  const [lockedParts, setLockedParts] = useState<LockedNameParts>({})
   const [complexity, setComplexity] = useState(1)
   const [optionsOpen, setOptionsOpen] = useState(true)
   const isMobile = useMemo(() => window.innerWidth <= 760, [])
@@ -88,7 +90,14 @@ export default function App() {
   function generate() {
     if (!anySelected) return
     const result: NameEntry = {
-      ...buildName(theme, lineage, themeData.calling ? calling : null, opts, complexity),
+      ...buildName(
+        theme,
+        lineage,
+        themeData.calling ? calling : null,
+        opts,
+        complexity,
+        lockedParts,
+      ),
       id: makeId(),
       themeLabel: themeData.label,
     }
@@ -115,6 +124,15 @@ export default function App() {
 
   function loadName(item: LedgerItem) {
     setCurrent(item)
+    setLockedParts((locked) => {
+      const next: LockedNameParts = {}
+      const keys: NamePartKey[] = ['first', 'middle', 'surname', 'title']
+      keys.forEach((key) => {
+        const part = item.parts?.[key]
+        if (locked[key] && part) next[key] = part
+      })
+      return next
+    })
     setReveal(false)
     requestAnimationFrame(() => setReveal(true))
   }
@@ -216,7 +234,51 @@ export default function App() {
             )}
             <div className="kicker">{kicker}</div>
             {current && current.full ? (
-              <div className="name">{current.full}</div>
+              <>
+                <div className="name">{current.full}</div>
+                {current.parts && (
+                  <>
+                    <div className="name-part-locks" aria-label="Lock name parts">
+                      {(
+                        [
+                          ['first', 'First name'],
+                          ['middle', 'Middle name'],
+                          ['surname', 'Surname'],
+                          ['title', 'Title'],
+                        ] as const
+                      ).map(([key, label]) => {
+                        const value = current.parts?.[key]
+                        if (!value) return null
+                        const isLocked = lockedParts[key] !== undefined
+                        return (
+                          <button
+                            key={key}
+                            type="button"
+                            className={`name-part-lock${isLocked ? ' locked' : ''}`}
+                            aria-pressed={isLocked}
+                            aria-label={`${isLocked ? 'Unlock' : 'Lock'} ${label.toLowerCase()} (${value})`}
+                            title={`${isLocked ? 'Unlock' : 'Lock'} ${label.toLowerCase()}`}
+                            onClick={() =>
+                              setLockedParts((locked) => {
+                                if (locked[key] !== undefined) {
+                                  const next = { ...locked }
+                                  delete next[key]
+                                  return next
+                                }
+                                return { ...locked, [key]: value }
+                              })
+                            }
+                          >
+                            <span>{label}</span>
+                            <LockIcon locked={isLocked} />
+                          </button>
+                        )
+                      })}
+                    </div>
+                    <p className="name-lock-hint">Lock parts to keep them when generating.</p>
+                  </>
+                )}
+              </>
             ) : (
               <div className="placeholder">
                 {anySelected ? 'Strike the seal to forge a name' : 'Choose at least one name part'}

@@ -1,4 +1,5 @@
 import PinIcon from '../PinIcon'
+import type { NameParts } from '../../generator'
 import './Ledger.less'
 
 export type LedgerItem = {
@@ -7,6 +8,7 @@ export type LedgerItem = {
   lineageLabel: string
   callingLabel: string | null
   themeLabel?: string
+  parts?: NameParts
 }
 
 type LedgerProps = {
