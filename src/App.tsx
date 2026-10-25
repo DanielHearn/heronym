@@ -255,6 +255,7 @@ export default function App() {
                 lineageKey={familyLineageKey}
                 callingKey={familyCallingKey}
                 complexity={complexity}
+                hasSurname={opts.surname}
               />
             </>
           )}

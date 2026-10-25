@@ -9,6 +9,7 @@ type FamilyMember = {
   details: string
   generation: number
   parentIds: string[]
+  surname: string
 }
 
 type FamilyTreeProps = {
@@ -20,6 +21,7 @@ type FamilyTreeProps = {
   lineageKey: string
   callingKey: string | null
   complexity: number
+  hasSurname: boolean
 }
 
 const CARD_WIDTH = 200
@@ -265,6 +267,7 @@ export default function FamilyTree({
   lineageKey,
   callingKey,
   complexity,
+  hasSurname,
 }: FamilyTreeProps) {
   const [panelOpen, setPanelOpen] = useState(true)
   const [members, setMembers] = useState<FamilyMember[]>([])
@@ -275,13 +278,30 @@ export default function FamilyTree({
   const dragRef = useRef<DragState | null>(null)
 
   const rootName = name.split(', the ')[0].trim()
-  const familyName = rootName.split(/\s+/).slice(1).join(' ')
+  const nameParts = rootName.split(/\s+/)
+  const familyName = hasSurname ? nameParts[nameParts.length - 1] : ''
   const who = callingLabel ? `${lineageLabel} ${callingLabel}` : lineageLabel
+
+  function generateSurname(avoid = '') {
+    let surname = ''
+    do {
+      surname = buildName(
+        themeKey,
+        lineageKey,
+        callingKey,
+        { first: false, middle: false, surname: true, title: false },
+        complexity,
+      ).full
+    } while (surname === avoid)
+    return surname
+  }
 
   function createRelative(
     relationship: string,
     generation: number,
     parentIds: string[] = [],
+    surname?: string,
+    avoidSurname = '',
   ): FamilyMember {
     const generatedName = buildName(
       themeKey,
@@ -290,8 +310,8 @@ export default function FamilyTree({
       { first: true, middle: false, surname: false, title: false },
       complexity,
     ).full
-    const surname = familyName || ''
-    const fullName = [generatedName, surname].filter(Boolean).join(' ')
+    const relativeSurname = hasSurname ? (surname ?? generateSurname(avoidSurname)) : ''
+    const fullName = [generatedName, relativeSurname].filter(Boolean).join(' ')
     const detailBank =
       relationship === 'Sibling' || relationship.includes('Aunt / Uncle')
         ? DETAILS.sibling
@@ -306,12 +326,13 @@ export default function FamilyTree({
       details: pick(detailBank),
       generation,
       parentIds,
+      surname: relativeSurname,
     }
   }
 
   function generate() {
-    const parentOne = createRelative('Parent', -1)
-    const parentTwo = createRelative('Parent', -1)
+    const parentOne = createRelative('Parent', -1, [], familyName)
+    const parentTwo = createRelative('Parent', -1, [], undefined, familyName)
     const root: FamilyMember = {
       id: makeId(),
       name,
@@ -319,6 +340,7 @@ export default function FamilyTree({
       details: `${who} · ${themeLabel} setting`,
       generation: 0,
       parentIds: [parentOne.id, parentTwo.id],
+      surname: familyName,
     }
     centerTreeOnNextRender.current = true
     setMembers([parentOne, parentTwo, root])
@@ -347,8 +369,19 @@ export default function FamilyTree({
         selectedMember.generation === 0
           ? 'Parent'
           : `${'Great-'.repeat(Math.max(0, -selectedMember.generation - 1))}Grandparent`
-      const parentOne = createRelative(parentRelationship, selectedMember.generation - 1)
-      const parentTwo = createRelative(parentRelationship, selectedMember.generation - 1)
+      const parentOne = createRelative(
+        parentRelationship,
+        selectedMember.generation - 1,
+        [],
+        selectedMember.surname,
+      )
+      const parentTwo = createRelative(
+        parentRelationship,
+        selectedMember.generation - 1,
+        [],
+        undefined,
+        selectedMember.surname,
+      )
       newParents.push(parentOne, parentTwo)
       parentIds = [parentOne.id, parentTwo.id]
     }
@@ -357,7 +390,12 @@ export default function FamilyTree({
       selectedMember.generation === 0
         ? 'Sibling'
         : `${'Great-'.repeat(Math.max(0, -selectedMember.generation - 1))}Aunt / Uncle`
-    const sibling = createRelative(siblingRelationship, selectedMember.generation, parentIds)
+    const sibling = createRelative(
+      siblingRelationship,
+      selectedMember.generation,
+      parentIds,
+      selectedMember.surname,
+    )
     setMembers((existing) => [
       ...existing.map((member) =>
         member.id === selectedMember.id && member.parentIds.length === 0
@@ -375,8 +413,14 @@ export default function FamilyTree({
       member.generation === -1
         ? 'Grandparent'
         : `${'Great-'.repeat(Math.max(0, -member.generation - 1))}Grandparent`
-    const parentOne = createRelative(relationship, member.generation - 1)
-    const parentTwo = createRelative(relationship, member.generation - 1)
+    const parentOne = createRelative(relationship, member.generation - 1, [], member.surname)
+    const parentTwo = createRelative(
+      relationship,
+      member.generation - 1,
+      [],
+      undefined,
+      member.surname,
+    )
     setMembers((existing) => [
       ...existing.map((item) =>
         item.id === member.id ? { ...item, parentIds: [parentOne.id, parentTwo.id] } : item,
