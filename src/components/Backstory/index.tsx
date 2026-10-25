@@ -6,6 +6,8 @@ type BackstoryProps = {
   lineageLabel: string
   callingLabel: string | null
   themeLabel: string
+  sourceId: string
+  onTextChange: (sourceId: string, text: string | null) => void
 }
 
 type Status = 'idle' | 'loading' | 'done' | 'error'
@@ -71,6 +73,8 @@ export default function Backstory({
   lineageLabel,
   callingLabel,
   themeLabel,
+  sourceId,
+  onTextChange,
 }: BackstoryProps) {
   const [panelOpen, setPanelOpen] = useState(true)
   const [status, setStatus] = useState<Status>('idle')
@@ -84,6 +88,10 @@ export default function Backstory({
   // superseded an in-flight one (rapid re-clicks).
   const mountedRef = useRef(true)
   const requestId = useRef(0)
+
+  useEffect(() => {
+    onTextChange(sourceId, text || null)
+  }, [onTextChange, sourceId, text])
 
   useEffect(() => {
     return () => {

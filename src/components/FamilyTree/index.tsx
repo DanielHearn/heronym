@@ -1,8 +1,8 @@
-import { useLayoutEffect, useRef, useState, type PointerEvent } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState, type PointerEvent } from 'react'
 import { buildName, makeId, pick } from '../../generator'
 import './FamilyTree.less'
 
-type FamilyMember = {
+export type FamilyTreeMember = {
   id: string
   name: string
   relationship: string
@@ -22,6 +22,8 @@ type FamilyTreeProps = {
   callingKey: string | null
   complexity: number
   hasSurname: boolean
+  sourceId: string
+  onMembersChange: (sourceId: string, members: FamilyTreeMember[]) => void
 }
 
 const CARD_WIDTH = 200
@@ -58,8 +60,8 @@ const DETAILS = {
   ],
 }
 
-function layoutMembers(members: FamilyMember[]) {
-  const generationMembers = new Map<number, FamilyMember[]>()
+function layoutMembers(members: FamilyTreeMember[]) {
+  const generationMembers = new Map<number, FamilyTreeMember[]>()
   members.forEach((member) => {
     const row = generationMembers.get(member.generation) ?? []
     row.push(member)
@@ -70,7 +72,7 @@ function layoutMembers(members: FamilyMember[]) {
   const generations = [...generationMembers.keys()]
   const minimumGeneration = Math.min(...generations)
   const maximumGeneration = Math.max(...generations)
-  const familyGroups = new Map<string, { parentIds: string[]; children: FamilyMember[] }>()
+  const familyGroups = new Map<string, { parentIds: string[]; children: FamilyTreeMember[] }>()
   members.forEach((child) => {
     if (child.parentIds.length === 0) return
     const key = child.parentIds.slice().sort().join('|')
@@ -108,7 +110,7 @@ function layoutMembers(members: FamilyMember[]) {
 
   for (let generation = maximumGeneration; generation > minimumGeneration; generation--) {
     const children = generationMembers.get(generation) ?? []
-    const siblingGroups = new Map<string, FamilyMember[]>()
+    const siblingGroups = new Map<string, FamilyTreeMember[]>()
     children.forEach((member) => {
       const key = member.parentIds.length
         ? member.parentIds.slice().sort().join('|')
@@ -268,14 +270,20 @@ export default function FamilyTree({
   callingKey,
   complexity,
   hasSurname,
+  sourceId,
+  onMembersChange,
 }: FamilyTreeProps) {
   const [panelOpen, setPanelOpen] = useState(true)
-  const [members, setMembers] = useState<FamilyMember[]>([])
+  const [members, setMembers] = useState<FamilyTreeMember[]>([])
   const [selectedMemberId, setSelectedMemberId] = useState<string | null>(null)
   const [isPanning, setIsPanning] = useState(false)
   const treeViewportRef = useRef<HTMLDivElement | null>(null)
   const centerTreeOnNextRender = useRef(false)
   const dragRef = useRef<DragState | null>(null)
+
+  useEffect(() => {
+    onMembersChange(sourceId, members)
+  }, [members, onMembersChange, sourceId])
 
   const rootName = name.split(', the ')[0].trim()
   const nameParts = rootName.split(/\s+/)
@@ -302,7 +310,7 @@ export default function FamilyTree({
     parentIds: string[] = [],
     surname?: string,
     avoidSurname = '',
-  ): FamilyMember {
+  ): FamilyTreeMember {
     const generatedName = buildName(
       themeKey,
       lineageKey,
@@ -333,7 +341,7 @@ export default function FamilyTree({
   function generate() {
     const parentOne = createRelative('Parent', -1, [], familyName)
     const parentTwo = createRelative('Parent', -1, [], undefined, familyName)
-    const root: FamilyMember = {
+    const root: FamilyTreeMember = {
       id: makeId(),
       name,
       relationship: 'You',
@@ -363,7 +371,7 @@ export default function FamilyTree({
     if (!selectedMember) return
 
     let parentIds = selectedMember.parentIds
-    const newParents: FamilyMember[] = []
+    const newParents: FamilyTreeMember[] = []
     if (parentIds.length === 0) {
       const parentRelationship =
         selectedMember.generation === 0
@@ -407,7 +415,7 @@ export default function FamilyTree({
     ])
   }
 
-  function addParents(member: FamilyMember) {
+  function addParents(member: FamilyTreeMember) {
     if (member.parentIds.length > 0) return
     const relationship =
       member.generation === -1

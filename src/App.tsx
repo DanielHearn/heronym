@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from 'react'
+import { useState, useMemo, useEffect, useCallback } from 'react'
 import { THEMES, THEME_KEYS } from './data'
 import { buildName, makeId, type LockedNameParts, type NamePartKey } from './generator'
 import PinIcon from './components/PinIcon'
@@ -7,7 +7,7 @@ import FieldSelect from './components/FieldSelect'
 import ToggleGroup from './components/ToggleGroup'
 import ComplexityControl from './components/ComplexityControl'
 import Backstory from './components/Backstory'
-import FamilyTree from './components/FamilyTree'
+import FamilyTree, { type FamilyTreeMember } from './components/FamilyTree'
 import Ledger, { type LedgerItem } from './components/Ledger'
 import './App.less'
 
@@ -39,6 +39,8 @@ export default function App() {
     title: false,
   })
   const [current, setCurrent] = useState<NameEntry | null>(null)
+  const [exportTree, setExportTree] = useState<{ id: string; members: FamilyTreeMember[] } | null>(null)
+  const [exportBackstory, setExportBackstory] = useState<{ id: string; text: string } | null>(null)
   const [history, setHistory] = useState<NameEntry[]>([])
   const [pinned, setPinned] = useState<NameEntry[]>(() => {
     try {
@@ -155,6 +157,54 @@ export default function App() {
     requestAnimationFrame(() => setReveal(true))
   }
 
+  function exportCurrent() {
+    if (!current) return
+
+    const tree =
+      exportTree?.id === current.id && exportTree.members.length > 0
+        ? exportTree.members.map(({ id, name, relationship, details, generation, parentIds }) => ({
+            id,
+            name,
+            relationship,
+            details,
+            generation,
+            parentIds,
+          }))
+        : undefined
+    const exportData = {
+      name: current.full,
+      theme: current.themeLabel ?? themeData.label,
+      lineage: current.lineageLabel,
+      calling: current.callingLabel,
+      parts: current.parts,
+      ...(tree ? { familyTree: tree } : {}),
+      ...(exportBackstory?.id === current.id && exportBackstory.text
+        ? { backstory: exportBackstory.text }
+        : {}),
+    }
+    const blob = new Blob([JSON.stringify(exportData, null, 2)], {
+      type: 'application/json',
+    })
+    const url = URL.createObjectURL(blob)
+    const link = document.createElement('a')
+    const filename = current.full
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-|-$/g, '')
+
+    link.href = url
+    link.download = `${filename || 'name'}.json`
+    link.click()
+    window.setTimeout(() => URL.revokeObjectURL(url), 0)
+  }
+
+  const updateExportTree = useCallback((id: string, members: FamilyTreeMember[]) => {
+    setExportTree({ id, members })
+  }, [])
+  const updateExportBackstory = useCallback((id: string, text: string | null) => {
+    setExportBackstory(text ? { id, text } : null)
+  }, [])
+
   const kicker = useMemo(() => {
     if (!current) return 'a name awaits the forge'
     return current.callingLabel
@@ -236,6 +286,14 @@ export default function App() {
 
             <p className="hint">Controls how many syllables and fragments are fused together</p>
           </div>
+          <button
+            type="button"
+            className="family-tree-button"
+            onClick={exportCurrent}
+            disabled={!current}
+          >
+            Export JSON
+          </button>
         </div>
 
         <div className="stage">
@@ -324,6 +382,8 @@ export default function App() {
                 lineageLabel={current.lineageLabel}
                 callingLabel={current.callingLabel}
                 themeLabel={current.themeLabel ?? themeData.label}
+                sourceId={current.id}
+                onTextChange={updateExportBackstory}
               />
               <FamilyTree
                 key={`family-tree-${current.id}`}
@@ -336,6 +396,8 @@ export default function App() {
                 callingKey={familyCallingKey}
                 complexity={complexity}
                 hasSurname={opts.surname}
+                sourceId={current.id}
+                onMembersChange={updateExportTree}
               />
             </>
           )}
