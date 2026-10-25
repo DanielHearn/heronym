@@ -14,10 +14,10 @@ export const fantasy: Theme = {
       syll: {
         onsets: [
           'b', 'c', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'm', 'n', 'p', 'r', 's', 't', 'v', 'w',
-          'br', 'cl', 'dr', 'fr', 'gr', 'st', 'th', 'wh', '',
+          'br', 'cl', 'dr', 'fr', 'gr', 'st', 'th', 'wh', 'cr', 'fl', 'gl', 'pr', 'sw', 'tr', 'y', '',
         ],
-        vowels: ['a', 'e', 'i', 'o', 'u', 'ae', 'io', 'ia'],
-        codas: ['n', 'r', 'l', 's', 'd', 't', 'nd', 'rd', 'ric', 'wen', 'ton', 'mund'],
+        vowels: ['a', 'e', 'i', 'o', 'u', 'ae', 'io', 'ia', 'ay', 'ea', 'ei', 'el', 'or', 'ie'],
+        codas: ['n', 'r', 'l', 's', 'd', 't', 'nd', 'rd', 'ric', 'wen', 'ton', 'mund', 'len', 'mar', 'wyn', 'ric', 'val', 'mere'],
         min: 2,
         max: 3,
         codaChance: 0.5,
@@ -25,20 +25,20 @@ export const fantasy: Theme = {
       surname: {
         prefixes: [
           'Ash', 'Black', 'Thorn', 'Winter', 'Hale', 'Fair', 'Sterling', 'Marl', 'Cross', 'Wynd',
-          'Dela', 'Riven', 'Storm', 'Bright', 'Old',
+          'Dela', 'Riven', 'Storm', 'Bright', 'Old', 'Fox', 'Raven', 'Red', 'Gold', 'Green', 'Oak',
         ],
         suffixes: [
           'ford', 'wood', 'thorne', 'ston', 'ridge', 'weather', 'cross', 'hall', 'den', 'croix',
-          'field', 'worth', 'gate', 'moor',
+          'field', 'worth', 'gate', 'moor', 'brook', 'well', 'mere', 'ley', 'bourne', 'barrow',
         ],
       },
     },
     elf: {
       label: 'Elf',
       syll: {
-        onsets: ['th', 's', 'l', 'n', 'c', 'v', 'f', 'el', 'sil', 'cal', 'gal', 'mir', 'nim', 'fae', 'lor', ''],
-        vowels: ['a', 'ae', 'i', 'ie', 'ei', 'io', 'y', 'ia'],
-        codas: ['l', 'n', 'r', 'th', 'rel', 'wen', 'dor', 'las'],
+        onsets: ['th', 's', 'l', 'n', 'c', 'v', 'f', 'el', 'sil', 'cal', 'gal', 'mir', 'nim', 'fae', 'lor', 'ael', 'ith', 'lyr', 'sel', ''],
+        vowels: ['a', 'ae', 'i', 'ie', 'ei', 'io', 'y', 'ia', 'e', 'ui', 'ea'],
+        codas: ['l', 'n', 'r', 'th', 'rel', 'wen', 'dor', 'las', 'riel', 'lith', 'ra', 'viel'],
         min: 2,
         max: 3,
         codaChance: 0.55,
@@ -46,20 +46,20 @@ export const fantasy: Theme = {
       surname: {
         prefixes: [
           'Moon', 'Star', 'Silver', 'Dusk', 'Night', 'Sun', 'Ember', 'Frost', 'Wind', 'Thorn',
-          'Even', 'Mist', 'Dawn', 'Shadow', 'Willow',
+          'Even', 'Mist', 'Dawn', 'Shadow', 'Willow', 'River', 'Luna', 'Silverleaf', 'Green', 'Pearl',
         ],
         suffixes: [
           'whisper', 'fall', 'leaf', 'runner', 'bloom', 'ward', 'wood', 'vale', 'rider', 'weave',
-          'star', 'glade',
+          'star', 'glade', 'bough', 'brook', 'song', 'glen', 'breeze', 'dell',
         ],
       },
     },
     dwarf: {
       label: 'Dwarf',
       syll: {
-        onsets: ['b', 'd', 'g', 'k', 'gr', 'br', 'dr', 'kr', 'th', 'st', 'bal', 'thor', 'dur', 'grim', 'kor', 'or'],
-        vowels: ['a', 'o', 'u', 'or', 'ur'],
-        codas: ['k', 'g', 'd', 'n', 'm', 'r', 'rik', 'grim', 'dun', 'gar', 'bek'],
+        onsets: ['b', 'd', 'g', 'k', 'gr', 'br', 'dr', 'kr', 'th', 'st', 'bal', 'thor', 'dur', 'grim', 'kor', 'or', 'bar', 'brok', 'dwal', 'far', 'thra'],
+        vowels: ['a', 'o', 'u', 'or', 'ur', 'ai', 'au', 'ei'],
+        codas: ['k', 'g', 'd', 'n', 'm', 'r', 'rik', 'grim', 'dun', 'gar', 'bek', 'din', 'drum', 'grim', 'mar'],
         min: 2,
         max: 3,
         codaChance: 0.75,
@@ -67,35 +67,35 @@ export const fantasy: Theme = {
       surname: {
         prefixes: [
           'Iron', 'Stone', 'Anvil', 'Deep', 'Battle', 'Coal', 'Ember', 'Hammer', 'Steel',
-          'Granite', 'Gold', 'Grim',
+          'Granite', 'Gold', 'Grim', 'Copper', 'Cinder', 'Frost', 'Red', 'Bronze', 'Oak',
         ],
         suffixes: [
           'fist', 'beard', 'heart', 'delver', 'hammer', 'forge', 'fall', 'shanks', 'hide', 'jaw',
-          'vein', 'hold',
+          'vein', 'hold', 'helm', 'mantle', 'delve', 'shield', 'stone',
         ],
       },
     },
     orc: {
       label: 'Orc',
       syll: {
-        onsets: ['g', 'k', 'z', 'v', 'x', 'gr', 'kr', 'vr', 'zg', 'ug', 'mor', 'thok', 'drak'],
-        vowels: ['a', 'u', 'o', 'ak', 'ug'],
-        codas: ['k', 'g', 'sh', 'z', 'gh', 'nak', 'gash', 'rok', 'zog'],
+        onsets: ['g', 'k', 'z', 'v', 'x', 'gr', 'kr', 'vr', 'zg', 'ug', 'mor', 'thok', 'drak', 'gar', 'gor', 'rak', 'snar', 'urg'],
+        vowels: ['a', 'u', 'o', 'ak', 'ug', 'ash', 'û', 'â'],
+        codas: ['k', 'g', 'sh', 'z', 'gh', 'nak', 'gash', 'rok', 'zog', 'th', 'rag', 'muk', 'gar'],
         min: 2,
         max: 2,
         codaChance: 0.85,
       },
       surname: {
-        prefixes: ['Blood', 'Skull', 'Iron', 'Bone', 'Death', 'Rage', 'War', 'Grim', 'Ash', 'Black', 'Doom', 'Gore'],
-        suffixes: ['fang', 'crusher', 'jaw', 'grip', 'fist', 'hide', 'tusk', 'howl', 'hold', 'bane', 'maw', 'scar'],
+        prefixes: ['Blood', 'Skull', 'Iron', 'Bone', 'Death', 'Rage', 'War', 'Grim', 'Ash', 'Black', 'Doom', 'Gore', 'Crag', 'Ruin', 'Dire', 'Fell'],
+        suffixes: ['fang', 'crusher', 'jaw', 'grip', 'fist', 'hide', 'tusk', 'howl', 'hold', 'bane', 'maw', 'scar', 'breaker', 'rend', 'snarl'],
       },
     },
     halfling: {
       label: 'Halfling',
       syll: {
-        onsets: ['b', 'p', 't', 'd', 'w', 'br', 'fl', 'gl', 'pl', 'tob', 'pip', 'mil', 'ros', 'dai'],
-        vowels: ['i', 'o', 'a', 'e', 'ie', 'oo'],
-        codas: ['n', 'le', 'y', 'ot', 'in', 'kle', 'by', 'wick'],
+        onsets: ['b', 'p', 't', 'd', 'w', 'br', 'fl', 'gl', 'pl', 'tob', 'pip', 'mil', 'ros', 'dai', 'bim', 'cob', 'hob', 'merry', 'posy'],
+        vowels: ['i', 'o', 'a', 'e', 'ie', 'oo', 'u', 'ea', 'ai'],
+        codas: ['n', 'le', 'y', 'ot', 'in', 'kle', 'by', 'wick', 'berry', 'kin', 'wise', 'well'],
         min: 2,
         max: 3,
         codaChance: 0.55,
@@ -103,20 +103,20 @@ export const fantasy: Theme = {
       surname: {
         prefixes: [
           'Under', 'Good', 'Bramble', 'Green', 'Tea', 'Apple', 'Meadow', 'Honey', 'Thistle',
-          'Fair', 'Puddle', 'Sweet',
+          'Fair', 'Puddle', 'Sweet', 'Bumble', 'Clover', 'Daisy', 'Hazel', 'Merry',
         ],
         suffixes: [
           'hill', 'barrel', 'ton', 'bottle', 'leaf', 'wick', 'lark', 'pot', 'down', 'barrow',
-          'foot', 'grass',
+          'foot', 'grass', 'berry', 'bloom', 'burrow', 'button',
         ],
       },
     },
     gnome: {
       label: 'Gnome',
       syll: {
-        onsets: ['f', 'z', 't', 'w', 'sp', 'fl', 'fr', 'tw', 'cog', 'zig', 'tob', 'niff', 'wren'],
-        vowels: ['i', 'e', 'o', 'izz', 'ib'],
-        codas: ['ble', 'le', 'kle', 'wick', 'et', 'ix', 'ot', 'in'],
+        onsets: ['f', 'z', 't', 'w', 'sp', 'fl', 'fr', 'tw', 'cog', 'zig', 'tob', 'niff', 'wren', 'bix', 'diz', 'fizz', 'gim', 'quill'],
+        vowels: ['i', 'e', 'o', 'izz', 'ib', 'a', 'u', 'ee'],
+        codas: ['ble', 'le', 'kle', 'wick', 'et', 'ix', 'ot', 'in', 'zzle', 'wink', 'bit', 'wick'],
         min: 2,
         max: 3,
         codaChance: 0.7,
@@ -124,20 +124,20 @@ export const fantasy: Theme = {
       surname: {
         prefixes: [
           'Cog', 'Gear', 'Spark', 'Bristle', 'Bellow', 'Tinker', 'Rustle', 'Wicker', 'Flare',
-          'Piston', 'Copper', 'Dooh',
+          'Piston', 'Copper', 'Dooh', 'Brass', 'Glimmer', 'Wobble', 'Button',
         ],
         suffixes: [
           'sprocket', 'whistle', 'wrench', 'cap', 'brass', 'top', 'bottom', 'spring', 'wick',
-          'whirl', 'fizz', 'icket',
+          'whirl', 'fizz', 'icket', 'gear', 'spark', 'bobbin',
         ],
       },
     },
     tiefling: {
       label: 'Tiefling',
       syll: {
-        onsets: ['z', 'x', 'v', 'k', 'd', 'dr', 'kr', 'zh', 'vh', 'ash', 'mor', 'nyr', 'sel'],
-        vowels: ['a', 'i', 'o', 'ae', 'y', 'io'],
-        codas: ['th', 'x', 'z', 'riel', 'mos', 'rak', 'oth', 'ar'],
+        onsets: ['z', 'x', 'v', 'k', 'd', 'dr', 'kr', 'zh', 'vh', 'ash', 'mor', 'nyr', 'sel', 'vel', 'zar', 'mal', 'ith'],
+        vowels: ['a', 'i', 'o', 'ae', 'y', 'io', 'e', 'ai', 'û'],
+        codas: ['th', 'x', 'z', 'riel', 'mos', 'rak', 'oth', 'ar', 'vyr', 'zael', 'rith'],
         min: 2,
         max: 3,
         codaChance: 0.65,
@@ -145,20 +145,20 @@ export const fantasy: Theme = {
       surname: {
         prefixes: [
           'Dusk', 'Ash', 'Ember', 'Night', 'Cinder', 'Brim', 'Hell', 'Soul', 'Shadow', 'Sin',
-          'Grim', 'Void',
+          'Grim', 'Void', 'Vex', 'Doom', 'Black', 'Wicked',
         ],
         suffixes: [
           'mourne', 'born', 'kin', 'flame', 'wake', 'stone', 'ward', 'rend', 'mere', 'weaver',
-          'horn', 'kiss',
+          'horn', 'kiss', 'curse', 'veil', 'mark', 'wrath',
         ],
       },
     },
     dragonborn: {
       label: 'Dragonborn',
       syll: {
-        onsets: ['dr', 'kr', 'thr', 'vr', 'zr', 'bh', 'rh', 'kas', 'vor', 'nyv', 'ith', 'tor'],
-        vowels: ['a', 'o', 'ae', 'ax', 'ex'],
-        codas: ['ath', 'ax', 'or', 'oth', 'rax', 'vex', 'thar', 'goth'],
+        onsets: ['dr', 'kr', 'thr', 'vr', 'zr', 'bh', 'rh', 'kas', 'vor', 'nyv', 'ith', 'tor', 'drav', 'khar', 'vrax', 'zora'],
+        vowels: ['a', 'o', 'ae', 'ax', 'ex', 'i', 'ei', 'au'],
+        codas: ['ath', 'ax', 'or', 'oth', 'rax', 'vex', 'thar', 'goth', 'drax', 'kesh', 'var'],
         min: 2,
         max: 3,
         codaChance: 0.8,
@@ -166,20 +166,20 @@ export const fantasy: Theme = {
       surname: {
         prefixes: [
           'Ash', 'Iron', 'Storm', 'Ember', 'Flame', 'Night', 'Blood', 'Thunder', 'Sun', 'Frost',
-          'Coal', 'Dusk',
+          'Coal', 'Dusk', 'Sky', 'Crimson', 'Obsidian', 'Rime',
         ],
         suffixes: [
           'scale', 'wing', 'claw', 'hide', 'born', 'crest', 'flight', 'fang', 'storm', 'tail',
-          'maw', 'spire',
+          'maw', 'spire', 'heart', 'scale', 'crown', 'fury',
         ],
       },
     },
     halforc: {
       label: 'Half-Orc',
       syll: {
-        onsets: ['g', 'k', 'v', 'dr', 'thr', 'kr', 'ash', 'mol', 'dren', 'kar'],
-        vowels: ['a', 'u', 'o', 'e'],
-        codas: ['k', 'sh', 'g', 'nak', 'hide', 'gar', 'rok'],
+        onsets: ['g', 'k', 'v', 'dr', 'thr', 'kr', 'ash', 'mol', 'dren', 'kar', 'gor', 'ruk', 'thar', 'brak'],
+        vowels: ['a', 'u', 'o', 'e', 'i', 'au'],
+        codas: ['k', 'sh', 'g', 'nak', 'hide', 'gar', 'rok', 'th', 'dak', 'var'],
         min: 2,
         max: 2,
         codaChance: 0.75,
@@ -187,20 +187,20 @@ export const fantasy: Theme = {
       surname: {
         prefixes: [
           'Iron', 'Battle', 'Storm', 'Rock', 'Ash', 'Wolf', 'Black', 'Grim', 'Thorn', 'War',
-          'Ridge', 'Hollow',
+          'Ridge', 'Hollow', 'Cinder', 'Fang', 'Oak', 'Thunder',
         ],
         suffixes: [
           'scar', 'born', 'hide', 'jaw', 'claw', 'bane', 'moor', 'hold', 'fang', 'axe', 'brand',
-          'fell',
+          'fell', 'break', 'maul', 'scar', 'heart',
         ],
       },
     },
     drow: {
       label: 'Drow',
       syll: {
-        onsets: ['v', 'z', 'q', 'x', 'dr', 'sh', 'ny', 'zh', 'bel', 'kael', 'ryl', 'sos'],
-        vowels: ['a', 'i', 'ae', 'io', 'y'],
-        codas: ['ra', 'th', 'el', 'dra', 'rae', 'nyth', 'lith'],
+        onsets: ['v', 'z', 'q', 'x', 'dr', 'sh', 'ny', 'zh', 'bel', 'kael', 'ryl', 'sos', 'phae', 'zha', 'vel', 'xal'],
+        vowels: ['a', 'i', 'ae', 'io', 'y', 'e', 'ei', 'ui'],
+        codas: ['ra', 'th', 'el', 'dra', 'rae', 'nyth', 'lith', 'ssra', 'vrae', 'zzin'],
         min: 2,
         max: 3,
         codaChance: 0.6,
@@ -208,20 +208,20 @@ export const fantasy: Theme = {
       surname: {
         prefixes: [
           'Dusk', 'Shadow', 'Night', 'Void', 'Black', 'Web', 'Nether', 'Spider', 'Umbra', 'Vael',
-          'Malith', 'Ny',
+          'Malith', 'Ny', 'Sable', 'Silk', 'Gloom', 'Onyx',
         ],
         suffixes: [
           'blade', 'veil', 'shade', 'whisper', 'mourn', 'born', 'kiss', 'leaf', 'woven', 'thorne',
-          'fall', 'reign',
+          'fall', 'reign', 'fang', 'spire', 'web', 'mourne',
         ],
       },
     },
     nightelf: {
       label: 'Night Elf',
       syll: {
-        onsets: ['sh', 't', 'm', 'v', 'k', 'el', 'fen', 'ony', 'ash', 'or', 'ny', 'dor', 'fur', 'wyn', ''],
-        vowels: ['a', 'i', 'e', 'o', 'y', 'ie', 'ae'],
-        codas: ['n', 's', 'th', 'ra', 'dor', 'ien', 'wyn', 'ah'],
+        onsets: ['sh', 't', 'm', 'v', 'k', 'el', 'fen', 'ony', 'ash', 'or', 'ny', 'dor', 'fur', 'wyn', 'lun', 'thal', ''],
+        vowels: ['a', 'i', 'e', 'o', 'y', 'ie', 'ae', 'ia', 'u', 'ei'],
+        codas: ['n', 's', 'th', 'ra', 'dor', 'ien', 'wyn', 'ah', 'riel', 'dil', 'aris'],
         min: 2,
         max: 3,
         codaChance: 0.5,
@@ -229,20 +229,20 @@ export const fantasy: Theme = {
       surname: {
         prefixes: [
           'Moon', 'Star', 'Shadow', 'Silver', 'Dream', 'Wind', 'Grove', 'Dawn', 'Ancient', 'Wild',
-          'Whisper', 'Nightsong',
+          'Whisper', 'Nightsong', 'Moon', 'Silver', 'Ashen', 'Starlight',
         ],
         suffixes: [
           'song', 'stride', 'weave', 'glen', 'leaf', 'dancer', 'sworn', 'walker', 'grove', 'wind',
-          'claw', 'shade',
+          'claw', 'shade', 'bark', 'bloom', 'watcher', 'song',
         ],
       },
     },
     forsaken: {
       label: 'Forsaken',
       syll: {
-        onsets: ['v', 'kr', 'gr', 'sy', 'dre', 'mor', 'bl', 'x', 'z', 'de', 'cal', 'noth'],
-        vowels: ['a', 'o', 'e', 'y', 'au'],
-        codas: ['us', 'ain', 'oth', 'ard', 'yn', 'aris', 'or', 'eth'],
+        onsets: ['v', 'kr', 'gr', 'sy', 'dre', 'mor', 'bl', 'x', 'z', 'de', 'cal', 'noth', 'ves', 'thal', 'noct', 'vael'],
+        vowels: ['a', 'o', 'e', 'y', 'au', 'i', 'ae', 'ui'],
+        codas: ['us', 'ain', 'oth', 'ard', 'yn', 'aris', 'or', 'eth', 'vex', 'mor', 'iel'],
         min: 2,
         max: 3,
         codaChance: 0.7,
@@ -250,20 +250,20 @@ export const fantasy: Theme = {
       surname: {
         prefixes: [
           'Grave', 'Rot', 'Hollow', 'Wither', 'Pale', 'Grim', 'Blight', 'Dread', 'Bone', 'Mourn',
-          'Shroud', 'Ash',
+          'Shroud', 'Ash', 'Wraith', 'Pallid', 'Grave', 'Dust',
         ],
         suffixes: [
           'bane', 'hollow', 'born', 'fall', 'grasp', 'shade', 'mire', 'touched', 'soul', 'rend',
-          'wither', 'crypt',
+          'wither', 'crypt', 'rot', 'grave', 'mourn', 'shroud',
         ],
       },
     },
     tauren: {
       label: 'Tauren',
       syll: {
-        onsets: ['ka', 'ta', 'ho', 'ma', 'ru', 'cha', 'ne', 'ah', 'oa', 'yo', 'gray', 'chief'],
-        vowels: ['a', 'o', 'u', 'ai', 'ei'],
-        codas: ['ka', 'po', 'ne', 'tah', 'ah', 'wa', 'nu', 'mo'],
+        onsets: ['ka', 'ta', 'ho', 'ma', 'ru', 'cha', 'ne', 'ah', 'oa', 'yo', 'gray', 'chief', 'ba', 'ko', 'mu', 'sha', 'taur'],
+        vowels: ['a', 'o', 'u', 'ai', 'ei', 'e', 'i', 'au'],
+        codas: ['ka', 'po', 'ne', 'tah', 'ah', 'wa', 'nu', 'mo', 'ra', 'to', 'sha', 'na'],
         min: 2,
         max: 3,
         codaChance: 0.5,
@@ -271,20 +271,20 @@ export const fantasy: Theme = {
       surname: {
         prefixes: [
           'Blood', 'Rune', 'Thunder', 'Stone', 'Wind', 'Swift', 'Sky', 'Sun', 'Earth', 'Iron',
-          'High', 'Moon',
+          'High', 'Moon', 'Tall', 'Golden', 'Red', 'Wild',
         ],
         suffixes: [
           'hoof', 'totem', 'horn', 'hide', 'walker', 'chaser', 'runner', 'song', 'strider',
-          'mane', 'tail', 'claw',
+          'mane', 'tail', 'claw', 'grass', 'river', 'earth', 'sage',
         ],
       },
     },
     troll: {
       label: 'Troll',
       syll: {
-        onsets: ['zul', 'sen', 'vol', 'mal', 'reth', 'haz', 'ra', 'zan', 'bwon', 'de', 'gaz', 'jan'],
-        vowels: ['a', 'i', 'o', 'u', 'ii'],
-        codas: ["'jin", "'gar", "'ash", "'tok", "'kai", 'gash', 'dun', 'rok'],
+        onsets: ['zul', 'sen', 'vol', 'mal', 'reth', 'haz', 'ra', 'zan', 'bwon', 'de', 'gaz', 'jan', 'jin', 'kal', 'mok', 'vaz'],
+        vowels: ['a', 'i', 'o', 'u', 'ii', 'e', 'ai', 'ua'],
+        codas: ["'jin", "'gar", "'ash", "'tok", "'kai", 'gash', 'dun', 'rok', "'zan", "'vo", "'jin"],
         min: 2,
         max: 2,
         codaChance: 0.6,
@@ -292,11 +292,11 @@ export const fantasy: Theme = {
       surname: {
         prefixes: [
           'Jungle', 'Shadow', 'Bone', 'Spirit', 'Voodoo', 'Venom', 'Sky', 'Blood', 'Storm',
-          'Dark', 'Vile', 'Sea',
+          'Dark', 'Vile', 'Sea', 'Razor', 'Black', 'Jade', 'Fever',
         ],
         suffixes: [
           'fang', 'claw', 'hex', 'spear', 'song', 'dancer', 'stalker', 'brew', 'tide', 'born',
-          'skull', 'charm',
+          'skull', 'charm', 'fang', 'mask', 'spirit', 'blood',
         ],
       },
     },
