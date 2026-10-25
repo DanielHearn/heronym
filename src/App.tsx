@@ -149,7 +149,13 @@ export default function App() {
       const keys: NamePartKey[] = ['first', 'middle', 'surname', 'title']
       keys.forEach((key) => {
         const part = item.parts?.[key]
-        if (locked[key] && part) next[key] = part
+        if (locked[key] && part) {
+          next[key] = {
+            value: part,
+            lineageLabel: item.lineageLabel,
+            callingLabel: item.callingLabel,
+          }
+        }
       })
       return next
     })
@@ -326,14 +332,22 @@ export default function App() {
                         const value = current.parts?.[key]
                         if (!value) return null
                         const isLocked = lockedParts[key] !== undefined
+                        const lockedSource = lockedParts[key]
+                        const isDifferentSource =
+                          lockedSource &&
+                          (lockedSource.lineageLabel !== current.lineageLabel ||
+                            lockedSource.callingLabel !== current.callingLabel)
+                        const sourceLabel = lockedSource
+                          ? `${lockedSource.lineageLabel}${lockedSource.callingLabel ? ` · ${lockedSource.callingLabel}` : ''}`
+                          : ''
                         return (
                           <button
                             key={key}
                             type="button"
                             className={`name-part-lock${isLocked ? ' locked' : ''}`}
                             aria-pressed={isLocked}
-                            aria-label={`${isLocked ? 'Unlock' : 'Lock'} ${label.toLowerCase()} (${value})`}
-                            title={`${isLocked ? 'Unlock' : 'Lock'} ${label.toLowerCase()}`}
+                            aria-label={`${isLocked ? 'Unlock' : 'Lock'} ${label.toLowerCase()} (${value})${isDifferentSource ? ` from ${sourceLabel}` : ''}`}
+                            title={`${isLocked ? 'Unlock' : 'Lock'} ${label.toLowerCase()}${isDifferentSource ? ` from ${sourceLabel}` : ''}`}
                             onClick={() =>
                               setLockedParts((locked) => {
                                 if (locked[key] !== undefined) {
@@ -341,12 +355,20 @@ export default function App() {
                                   delete next[key]
                                   return next
                                 }
-                                return { ...locked, [key]: value }
+                                return {
+                                  ...locked,
+                                  [key]: {
+                                    value,
+                                    lineageLabel: current.lineageLabel,
+                                    callingLabel: current.callingLabel,
+                                  },
+                                }
                               })
                             }
                           >
                             <span>{label}</span>
                             <LockIcon locked={isLocked} />
+                            {isDifferentSource && <small className="name-part-source">From {sourceLabel}</small>}
                           </button>
                         )
                       })}

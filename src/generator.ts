@@ -62,7 +62,12 @@ type NameOptions = {
 
 export type NamePartKey = 'first' | 'middle' | 'surname' | 'title'
 export type NameParts = Record<NamePartKey, string | null>
-export type LockedNameParts = Partial<Record<NamePartKey, string>>
+export type LockedNamePart = {
+  value: string
+  lineageLabel: string
+  callingLabel: string | null
+}
+export type LockedNameParts = Partial<Record<NamePartKey, LockedNamePart>>
 
 export function buildName(
   themeKey: string,
@@ -89,15 +94,15 @@ export function buildName(
   const parts: string[] = []
 
   if (opts.first) {
-    first = lockedParts.first ?? forgePersonalName(lineage.syll, null, complexity)
+    first = lockedParts.first?.value ?? forgePersonalName(lineage.syll, null, complexity)
     parts.push(first)
   }
   if (opts.middle) {
-    middle = lockedParts.middle ?? forgePersonalName(lineage.syll, first, complexity)
+    middle = lockedParts.middle?.value ?? forgePersonalName(lineage.syll, first, complexity)
     parts.push(middle)
   }
   if (opts.surname) {
-    surname = lockedParts.surname ?? forgeCompound(lineage.surname, complexity)
+    surname = lockedParts.surname?.value ?? forgeCompound(lineage.surname, complexity)
     parts.push(surname)
   }
 
@@ -106,7 +111,7 @@ export function buildName(
 
   // Title only ever generates when the theme actually has a calling axis.
   if (opts.title && calling) {
-    title = lockedParts.title ?? forgeCompound(calling.title, complexity)
+    title = lockedParts.title?.value ?? forgeCompound(calling.title, complexity)
     full = base ? `${base}, the ${title}` : `The ${title}`
   } else {
     full = base

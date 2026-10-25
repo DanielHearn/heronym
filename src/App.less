@@ -236,7 +236,9 @@
 
 .name-part-lock {
   display: inline-flex;
+  flex-wrap: wrap;
   align-items: center;
+  justify-content: center;
   gap: 6px;
   min-height: 34px;
   padding: 5px 9px;
@@ -255,6 +257,12 @@
     width: 16px;
     height: 16px;
     flex-shrink: 0;
+  }
+
+  .name-part-source {
+    flex-basis: 100%;
+    font-size: 0.72rem;
+    line-height: 1;
   }
 
   &:hover,
