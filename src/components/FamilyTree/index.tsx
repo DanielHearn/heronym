@@ -366,10 +366,7 @@ export default function FamilyTree({
     centerTreeOnNextRender.current = false
   }, [members])
 
-  function addSibling() {
-    const selectedMember = members.find((member) => member.id === selectedMemberId)
-    if (!selectedMember) return
-
+  function addSibling(selectedMember: FamilyTreeMember) {
     let parentIds = selectedMember.parentIds
     const newParents: FamilyTreeMember[] = []
     if (parentIds.length === 0) {
@@ -560,31 +557,37 @@ export default function FamilyTree({
                       {member.name}
                     </button>
                     <p>{member.details}</p>
-                    {member.relationship !== 'You' && member.parentIds.length === 0 && (
+                    <div className="family-member-actions">
                       <button
                         type="button"
                         className="family-member-expand"
-                        onClick={() => addParents(member)}
+                        onClick={() => addSibling(member)}
                       >
-                        Add parents
+                        + sibling
                       </button>
-                    )}
+                      {member.relationship !== 'You' && member.parentIds.length === 0 && (
+                        <button
+                          type="button"
+                          className="family-member-expand"
+                          onClick={() => addParents(member)}
+                        >
+                          + parents
+                        </button>
+                      )}
+                    </div>
                   </article>
                 ))}
               </div>
             </div>
             <div className="family-tree-actions">
               <div className="family-tree-action-buttons">
-                <button type="button" className="family-tree-button" onClick={addSibling}>
-                  Add sibling
-                </button>
                 <button type="button" className="family-tree-button" onClick={generate}>
                   Reset tree
                 </button>
               </div>
               <p className="family-tree-hint">
-                Drag the tree to pan, or use the scroll bars and wheel to explore. Add a sibling to
-                the selected person, or use Add parents on any relative to expand the tree.
+                Drag the tree to pan, or use the scroll bars and wheel to explore. Add siblings or
+                parents directly from each person.
               </p>
             </div>
           </>
