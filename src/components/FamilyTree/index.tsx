@@ -31,6 +31,40 @@ const CARD_HEIGHT = 168
 const NODE_STEP = 244
 const EDGE_PADDING = 28
 
+function escapeSvgText(value: string) {
+  return value.replace(/[&<>"']/g, (character) => {
+    const entities: Record<string, string> = {
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      '"': '&quot;',
+      "'": '&apos;',
+    }
+    return entities[character]
+  })
+}
+
+function wrapSvgText(value: string, maxCharacters: number, maxLines: number) {
+  const lines: string[] = []
+  let remaining = value.trim()
+  while (remaining && lines.length < maxLines) {
+    if (remaining.length <= maxCharacters) {
+      lines.push(remaining)
+      remaining = ''
+      break
+    }
+    let breakAt = remaining.lastIndexOf(' ', maxCharacters)
+    if (breakAt < 1) breakAt = maxCharacters
+    lines.push(remaining.slice(0, breakAt).trim())
+    remaining = remaining.slice(breakAt).trim()
+  }
+  if (remaining && lines.length) {
+    const lastLine = lines[lines.length - 1]
+    lines[lines.length - 1] = `${lastLine.slice(0, maxCharacters - 3)}...`
+  }
+  return lines
+}
+
 type DragState = {
   pointerId: number
   x: number
@@ -435,6 +469,109 @@ export default function FamilyTree({
     ])
   }
 
+  async function exportPng() {
+    if (!tree) return
+
+    const cards = tree.placed
+      .map((member) => {
+        const x = member.x - CARD_WIDTH / 2
+        const self = member.relationship === 'You'
+        const relationship = escapeSvgText(member.relationship.toUpperCase())
+        const nameLines = wrapSvgText(member.name, 23, 2)
+        const detailLines = wrapSvgText(member.details, 28, 2)
+        return `
+          <g>
+            <rect x="${x}" y="${member.y}" width="${CARD_WIDTH}" height="${CARD_HEIGHT}" rx="2"
+              fill="${self ? 'url(#self-card)' : 'url(#member-card)'}" stroke="${self ? '#d9ac4e' : '#6c542d'}" />
+            <text x="${member.x}" y="${member.y + 27}" text-anchor="middle" fill="#d9ac4e"
+              font-family="Georgia, serif" font-size="12" letter-spacing="0.5">${relationship}</text>
+            ${nameLines
+              .map(
+                (line, index) => `
+                  <text x="${member.x}" y="${member.y + 54 + index * 19}" text-anchor="middle"
+                    fill="#f1dfb7" font-family="Georgia, serif" font-size="16" font-weight="bold">
+                    ${escapeSvgText(line)}
+                  </text>`,
+              )
+              .join('')}
+            ${detailLines
+              .map(
+                (line, index) => `
+                  <text x="${member.x}" y="${member.y + 108 + index * 17}" text-anchor="middle"
+                    fill="#b5a58d" font-family="Georgia, serif" font-size="13">
+                    ${escapeSvgText(line)}
+                  </text>`,
+              )
+              .join('')}
+          </g>`
+      })
+      .join('')
+    const svgMarkup = `
+      <svg xmlns="http://www.w3.org/2000/svg" width="${tree.width}" height="${tree.height}"
+        viewBox="0 0 ${tree.width} ${tree.height}">
+        <defs>
+          <radialGradient id="background" cx="50%" cy="50%" r="70%">
+            <stop offset="0%" stop-color="#261c13" />
+            <stop offset="100%" stop-color="#1a140f" />
+          </radialGradient>
+          <linearGradient id="member-card" x2="0" y2="1">
+            <stop offset="0%" stop-color="#302419" />
+            <stop offset="100%" stop-color="#241b12" />
+          </linearGradient>
+          <linearGradient id="self-card" x2="0" y2="1">
+            <stop offset="0%" stop-color="#49351a" />
+            <stop offset="100%" stop-color="#302216" />
+          </linearGradient>
+        </defs>
+        <rect width="100%" height="100%" fill="url(#background)" />
+        ${tree.edges
+          .map((path) => `<path d="${path}" fill="none" stroke="#b18a3d" stroke-width="2" opacity="0.75" />`)
+          .join('')}
+        ${cards}
+      </svg>`
+
+    try {
+      const imageUrl = URL.createObjectURL(
+        new Blob([svgMarkup], {
+          type: 'image/svg+xml;charset=utf-8',
+        }),
+      )
+      try {
+        const image = new Image()
+        await new Promise<void>((resolve, reject) => {
+          image.onload = () => resolve()
+          image.onerror = () => reject(new Error('Could not render the family tree image.'))
+          image.src = imageUrl
+        })
+
+        const canvas = document.createElement('canvas')
+        canvas.width = tree.width
+        canvas.height = tree.height
+        const context = canvas.getContext('2d')
+        if (!context) throw new Error('Could not create an image canvas.')
+        context.drawImage(image, 0, 0)
+
+        const png = await new Promise<Blob>((resolve, reject) => {
+          canvas.toBlob((blob) => {
+            if (blob) resolve(blob)
+            else reject(new Error('Could not encode the family tree as PNG.'))
+          }, 'image/png')
+        })
+        const downloadUrl = URL.createObjectURL(png)
+        const link = document.createElement('a')
+        link.href = downloadUrl
+        link.download = `${name.toLowerCase().replace(/[^a-z0-9]+/g, '-') || 'family-tree'}.png`
+        link.click()
+        window.setTimeout(() => URL.revokeObjectURL(downloadUrl), 0)
+      } finally {
+        URL.revokeObjectURL(imageUrl)
+      }
+    } catch (error) {
+      console.error('Failed to export family tree PNG', error)
+      window.alert('The family tree could not be exported as a PNG.')
+    }
+  }
+
   function startPan(event: PointerEvent<HTMLDivElement>) {
     if (event.pointerType !== 'mouse' || event.button !== 0) return
     if (event.target instanceof Element && event.target.closest('button')) return
@@ -581,6 +718,9 @@ export default function FamilyTree({
             </div>
             <div className="family-tree-actions">
               <div className="family-tree-action-buttons">
+                <button type="button" className="family-tree-button" onClick={exportPng}>
+                  Export PNG
+                </button>
                 <button type="button" className="family-tree-button" onClick={generate}>
                   Reset tree
                 </button>
