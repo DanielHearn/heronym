@@ -257,7 +257,7 @@ export default function App() {
               label="Theme"
               value={theme}
               options={THEME_KEYS.map((k) => ({ value: k, label: THEMES[k].label }))}
-              onChange={(e) => setTheme(e.target.value)}
+              onChange={setTheme}
             />
 
             <FieldSelect
@@ -268,7 +268,8 @@ export default function App() {
                 ...lineageKeys.map((k) => ({ value: k, label: themeData.lineage[k].label })),
                 { value: 'random', label: 'Random' },
               ]}
-              onChange={(e) => setLineage(e.target.value)}
+              searchable
+              onChange={setLineage}
             />
 
             {themeData.calling && (
@@ -280,7 +281,8 @@ export default function App() {
                   ...callingKeys.map((k) => ({ value: k, label: themeData.calling![k].label })),
                   { value: 'random', label: 'Random' },
                 ]}
-                onChange={(e) => setCalling(e.target.value)}
+                searchable
+                onChange={setCalling}
               />
             )}
 
