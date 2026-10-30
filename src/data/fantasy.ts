@@ -25,11 +25,15 @@ export const fantasy: Theme = {
       surname: {
         prefixes: [
           'Ash', 'Black', 'Thorn', 'Winter', 'Hale', 'Fair', 'Sterling', 'Marl', 'Cross', 'Wynd',
-          'Dela', 'Riven', 'Storm', 'Bright', 'Old', 'Fox', 'Raven', 'Red', 'Gold', 'Green', 'Oak',
+          'Dela', 'Riven', 'Storm', 'Bright', 'Old', 'Fox', 'Raven', 'Red', 'Gold', 'Green',
+          'Oak', 'Brook', 'Harrow', 'Mercer', 'Fenwick', 'Hart', 'Gilt', 'Lark', 'Kestrel', 'Whitlock',
+          'Ravenhill',
         ],
         suffixes: [
           'ford', 'wood', 'thorne', 'ston', 'ridge', 'weather', 'cross', 'hall', 'den', 'croix',
           'field', 'worth', 'gate', 'moor', 'brook', 'well', 'mere', 'ley', 'bourne', 'barrow',
+          'bridge', 'holm', 'dale', 'stead', 'shire', 'wick', 'crest', 'vale', 'bury', 'ham',
+          'haven', 'hurst',
         ],
       },
     },
@@ -47,10 +51,12 @@ export const fantasy: Theme = {
         prefixes: [
           'Moon', 'Star', 'Silver', 'Dusk', 'Night', 'Sun', 'Ember', 'Frost', 'Wind', 'Thorn',
           'Even', 'Mist', 'Dawn', 'Shadow', 'Willow', 'River', 'Luna', 'Silverleaf', 'Green', 'Pearl',
+          'Aster', 'Lumen', 'Glimmer', 'Sapphire', 'Crystal', 'Tidal', 'Verdant', 'Azure', 'Gilded', 'Evermore',
         ],
         suffixes: [
           'whisper', 'fall', 'leaf', 'runner', 'bloom', 'ward', 'wood', 'vale', 'rider', 'weave',
-          'star', 'glade', 'bough', 'brook', 'song', 'glen', 'breeze', 'dell',
+          'star', 'glade', 'bough', 'brook', 'song', 'glen', 'breeze', 'dell', 'mantle', 'spire',
+          'shade', 'grace', 'lark', 'petal', 'wing', 'heart', 'shimmer', 'crown',
         ],
       },
     },
@@ -66,12 +72,14 @@ export const fantasy: Theme = {
       },
       surname: {
         prefixes: [
-          'Iron', 'Stone', 'Anvil', 'Deep', 'Battle', 'Coal', 'Ember', 'Hammer', 'Steel',
-          'Granite', 'Gold', 'Grim', 'Copper', 'Cinder', 'Frost', 'Red', 'Bronze', 'Oak',
+          'Iron', 'Stone', 'Anvil', 'Deep', 'Battle', 'Coal', 'Ember', 'Hammer', 'Steel', 'Granite',
+          'Gold', 'Grim', 'Copper', 'Cinder', 'Frost', 'Red', 'Bronze', 'Oak', 'Mithril', 'Forge',
+          'Tunnel', 'Boulder', 'Flint', 'Ironhold', 'Rune', 'Oreheart', 'Slate', 'Ironbrow',
         ],
         suffixes: [
           'fist', 'beard', 'heart', 'delver', 'hammer', 'forge', 'fall', 'shanks', 'hide', 'jaw',
-          'vein', 'hold', 'helm', 'mantle', 'delve', 'shield', 'stone',
+          'vein', 'hold', 'helm', 'mantle', 'delve', 'shield', 'stone', 'brow', 'axe', 'crag',
+          'ward', 'pick', 'seam', 'mine', 'bane', 'gut', 'anvil',
         ],
       },
     },
@@ -86,8 +94,16 @@ export const fantasy: Theme = {
         codaChance: 0.85,
       },
       surname: {
-        prefixes: ['Blood', 'Skull', 'Iron', 'Bone', 'Death', 'Rage', 'War', 'Grim', 'Ash', 'Black', 'Doom', 'Gore', 'Crag', 'Ruin', 'Dire', 'Fell'],
-        suffixes: ['fang', 'crusher', 'jaw', 'grip', 'fist', 'hide', 'tusk', 'howl', 'hold', 'bane', 'maw', 'scar', 'breaker', 'rend', 'snarl'],
+        prefixes: [
+          'Blood', 'Skull', 'Iron', 'Bone', 'Death', 'Rage', 'War', 'Grim', 'Ash', 'Black',
+          'Doom', 'Gore', 'Crag', 'Ruin', 'Dire', 'Fell', 'Scar', 'Brute', 'Savage', 'Wrath',
+          'Gnash', 'Marrow', 'Spite', 'Slag', 'Thrash', 'Stormrage',
+        ],
+        suffixes: [
+          'fang', 'crusher', 'jaw', 'grip', 'fist', 'hide', 'tusk', 'howl', 'hold', 'bane',
+          'maw', 'scar', 'breaker', 'rend', 'snarl', 'render', 'skull', 'spitter', 'stomp', 'reaver',
+          'sunder', 'gore', 'tooth', 'slayer', 'crush', 'bash',
+        ],
       },
     },
     halfling: {
@@ -102,12 +118,14 @@ export const fantasy: Theme = {
       },
       surname: {
         prefixes: [
-          'Under', 'Good', 'Bramble', 'Green', 'Tea', 'Apple', 'Meadow', 'Honey', 'Thistle',
-          'Fair', 'Puddle', 'Sweet', 'Bumble', 'Clover', 'Daisy', 'Hazel', 'Merry',
+          'Under', 'Good', 'Bramble', 'Green', 'Tea', 'Apple', 'Meadow', 'Honey', 'Thistle', 'Fair',
+          'Puddle', 'Sweet', 'Bumble', 'Clover', 'Daisy', 'Hazel', 'Merry', 'Pippin', 'Hearth', 'Marigold',
+          'Cobble', 'Thimble', 'Barley', 'Dimple', 'Juniper', 'Sunny', 'Tuck',
         ],
         suffixes: [
           'hill', 'barrel', 'ton', 'bottle', 'leaf', 'wick', 'lark', 'pot', 'down', 'barrow',
-          'foot', 'grass', 'berry', 'bloom', 'burrow', 'button',
+          'foot', 'grass', 'berry', 'bloom', 'burrow', 'button', 'crumb', 'hollow', 'patch', 'field',
+          'muffin', 'lane', 'spoon', 'brook', 'nook', 'kettle', 'pie', 'stile',
         ],
       },
     },
@@ -123,12 +141,14 @@ export const fantasy: Theme = {
       },
       surname: {
         prefixes: [
-          'Cog', 'Gear', 'Spark', 'Bristle', 'Bellow', 'Tinker', 'Rustle', 'Wicker', 'Flare',
-          'Piston', 'Copper', 'Dooh', 'Brass', 'Glimmer', 'Wobble', 'Button',
+          'Cog', 'Gear', 'Spark', 'Bristle', 'Bellow', 'Tinker', 'Rustle', 'Wicker', 'Flare', 'Piston',
+          'Copper', 'Dooh', 'Brass', 'Glimmer', 'Wobble', 'Button', 'Fizzle', 'Sprocket', 'Widget', 'Nimble',
+          'Clank', 'Quill', 'Bolt', 'Gizmo', 'Whirl', 'Lathe',
         ],
         suffixes: [
-          'sprocket', 'whistle', 'wrench', 'cap', 'brass', 'top', 'bottom', 'spring', 'wick',
-          'whirl', 'fizz', 'icket', 'gear', 'spark', 'bobbin',
+          'sprocket', 'whistle', 'wrench', 'cap', 'brass', 'top', 'bottom', 'spring', 'wick', 'whirl',
+          'fizz', 'icket', 'gear', 'spark', 'bobbin', 'gadget', 'blink', 'puff', 'dinger', 'shine',
+          'spinner', 'gasket', 'rivet', 'ratchet', 'zap', 'tinker',
         ],
       },
     },
@@ -145,11 +165,13 @@ export const fantasy: Theme = {
       surname: {
         prefixes: [
           'Dusk', 'Ash', 'Ember', 'Night', 'Cinder', 'Brim', 'Hell', 'Soul', 'Shadow', 'Sin',
-          'Grim', 'Void', 'Vex', 'Doom', 'Black', 'Wicked',
+          'Grim', 'Void', 'Vex', 'Doom', 'Black', 'Wicked', 'Pyre', 'Sorrow', 'Hex', 'Blight',
+          'Ruin', 'Malice', 'Sable', 'Ebon', 'Thorn', 'Wraith',
         ],
         suffixes: [
           'mourne', 'born', 'kin', 'flame', 'wake', 'stone', 'ward', 'rend', 'mere', 'weaver',
-          'horn', 'kiss', 'curse', 'veil', 'mark', 'wrath',
+          'horn', 'kiss', 'curse', 'veil', 'mark', 'wrath', 'brand', 'vow', 'hollow', 'gate',
+          'ash', 'bane', 'spire', 'craft', 'tide', 'heart', 'thorn',
         ],
       },
     },
@@ -166,11 +188,13 @@ export const fantasy: Theme = {
       surname: {
         prefixes: [
           'Ash', 'Iron', 'Storm', 'Ember', 'Flame', 'Night', 'Blood', 'Thunder', 'Sun', 'Frost',
-          'Coal', 'Dusk', 'Sky', 'Crimson', 'Obsidian', 'Rime',
+          'Coal', 'Dusk', 'Sky', 'Crimson', 'Obsidian', 'Rime', 'Drake', 'Wyrm', 'Bronze', 'Gold',
+          'Pyre', 'Ruby', 'Sapphire', 'Jade', 'Sear', 'Scale',
         ],
         suffixes: [
           'scale', 'wing', 'claw', 'hide', 'born', 'crest', 'flight', 'fang', 'storm', 'tail',
-          'maw', 'spire', 'heart', 'scale', 'crown', 'fury',
+          'maw', 'spire', 'heart', 'crown', 'fury', 'talon', 'ember', 'wyrm', 'sun', 'dawn',
+          'glide', 'horn', 'roar', 'sear', 'gleam', 'ridge',
         ],
       },
     },
@@ -187,11 +211,13 @@ export const fantasy: Theme = {
       surname: {
         prefixes: [
           'Iron', 'Battle', 'Storm', 'Rock', 'Ash', 'Wolf', 'Black', 'Grim', 'Thorn', 'War',
-          'Ridge', 'Hollow', 'Cinder', 'Fang', 'Oak', 'Thunder',
+          'Ridge', 'Hollow', 'Cinder', 'Fang', 'Oak', 'Thunder', 'Boulder', 'Feral', 'Wild', 'Crag',
+          'Scarred', 'Brawn', 'Mire', 'Cudgel', 'Marsh', 'Tusk',
         ],
         suffixes: [
-          'scar', 'born', 'hide', 'jaw', 'claw', 'bane', 'moor', 'hold', 'fang', 'axe', 'brand',
-          'fell', 'break', 'maul', 'scar', 'heart',
+          'scar', 'born', 'hide', 'jaw', 'claw', 'bane', 'moor', 'hold', 'fang', 'axe',
+          'brand', 'fell', 'break', 'maul', 'heart', 'brow', 'tooth', 'crush', 'spear', 'mark',
+          'shield', 'stride', 'fury', 'breaker', 'mane', 'walker',
         ],
       },
     },
@@ -208,11 +234,13 @@ export const fantasy: Theme = {
       surname: {
         prefixes: [
           'Dusk', 'Shadow', 'Night', 'Void', 'Black', 'Web', 'Nether', 'Spider', 'Umbra', 'Vael',
-          'Malith', 'Ny', 'Sable', 'Silk', 'Gloom', 'Onyx',
+          'Malith', 'Ny', 'Sable', 'Silk', 'Gloom', 'Onyx', 'Obsidian', 'Abyss', 'Thread', 'Venom',
+          'Pale', 'Ilith', 'Ryl', 'Quiet', 'Ebon',
         ],
         suffixes: [
           'blade', 'veil', 'shade', 'whisper', 'mourn', 'born', 'kiss', 'leaf', 'woven', 'thorne',
-          'fall', 'reign', 'fang', 'spire', 'web', 'mourne',
+          'fall', 'reign', 'fang', 'spire', 'web', 'mourne', 'lance', 'hymn', 'shroud', 'dirge',
+          'thread', 'crown', 'sting', 'silk', 'song', 'bane',
         ],
       },
     },
@@ -229,11 +257,13 @@ export const fantasy: Theme = {
       surname: {
         prefixes: [
           'Moon', 'Star', 'Shadow', 'Silver', 'Dream', 'Wind', 'Grove', 'Dawn', 'Ancient', 'Wild',
-          'Whisper', 'Nightsong', 'Moon', 'Silver', 'Ashen', 'Starlight',
+          'Whisper', 'Nightsong', 'Ashen', 'Starlight', 'Twilight', 'Starlit', 'Lunar', 'Mourning', 'Eternal', 'Ember',
+          'Verdant', 'Glade', 'Sable', 'Sage', 'Mist',
         ],
         suffixes: [
           'song', 'stride', 'weave', 'glen', 'leaf', 'dancer', 'sworn', 'walker', 'grove', 'wind',
-          'claw', 'shade', 'bark', 'bloom', 'watcher', 'song',
+          'claw', 'shade', 'bark', 'bloom', 'watcher', 'petal', 'crest', 'ward', 'rain', 'moon',
+          'tide', 'spire', 'herald', 'veil', 'glow',
         ],
       },
     },
@@ -250,11 +280,13 @@ export const fantasy: Theme = {
       surname: {
         prefixes: [
           'Grave', 'Rot', 'Hollow', 'Wither', 'Pale', 'Grim', 'Blight', 'Dread', 'Bone', 'Mourn',
-          'Shroud', 'Ash', 'Wraith', 'Pallid', 'Grave', 'Dust',
+          'Shroud', 'Ash', 'Wraith', 'Pallid', 'Dust', 'Gloam', 'Ghoul', 'Plague', 'Tomb', 'Sallow',
+          'Ashen', 'Withered', 'Requiem', 'Cinder', 'Husk',
         ],
         suffixes: [
           'bane', 'hollow', 'born', 'fall', 'grasp', 'shade', 'mire', 'touched', 'soul', 'rend',
-          'wither', 'crypt', 'rot', 'grave', 'mourn', 'shroud',
+          'wither', 'crypt', 'rot', 'grave', 'mourn', 'shroud', 'decay', 'maw', 'vigil', 'ward',
+          'lament', 'sworn', 'ghast', 'pall', 'veil', 'husk', 'echo',
         ],
       },
     },
@@ -271,11 +303,13 @@ export const fantasy: Theme = {
       surname: {
         prefixes: [
           'Blood', 'Rune', 'Thunder', 'Stone', 'Wind', 'Swift', 'Sky', 'Sun', 'Earth', 'Iron',
-          'High', 'Moon', 'Tall', 'Golden', 'Red', 'Wild',
+          'High', 'Moon', 'Tall', 'Golden', 'Red', 'Wild', 'Dust', 'Plains', 'Mesa', 'Ghost',
+          'Spirit', 'Sage', 'Grass', 'Dawn', 'Rain', 'Sacred', 'Ember', 'Ridge',
         ],
         suffixes: [
-          'hoof', 'totem', 'horn', 'hide', 'walker', 'chaser', 'runner', 'song', 'strider',
-          'mane', 'tail', 'claw', 'grass', 'river', 'earth', 'sage',
+          'hoof', 'totem', 'horn', 'hide', 'walker', 'chaser', 'runner', 'song', 'strider', 'mane',
+          'tail', 'claw', 'grass', 'river', 'earth', 'sage', 'drum', 'spirit', 'mesa', 'plain',
+          'rider', 'keeper', 'dancer', 'herd', 'bluff', 'sky', 'dust',
         ],
       },
     },
@@ -291,12 +325,14 @@ export const fantasy: Theme = {
       },
       surname: {
         prefixes: [
-          'Jungle', 'Shadow', 'Bone', 'Spirit', 'Voodoo', 'Venom', 'Sky', 'Blood', 'Storm',
-          'Dark', 'Vile', 'Sea', 'Razor', 'Black', 'Jade', 'Fever',
+          'Jungle', 'Shadow', 'Bone', 'Spirit', 'Voodoo', 'Venom', 'Sky', 'Blood', 'Storm', 'Dark',
+          'Vile', 'Sea', 'Razor', 'Black', 'Jade', 'Fever', 'Hex', 'Marsh', 'Mud', 'Ritual',
+          'Witch', 'Coral', 'Mossy', 'Shrunken', 'Tusk', 'Bog',
         ],
         suffixes: [
           'fang', 'claw', 'hex', 'spear', 'song', 'dancer', 'stalker', 'brew', 'tide', 'born',
-          'skull', 'charm', 'fang', 'mask', 'spirit', 'blood',
+          'skull', 'charm', 'mask', 'spirit', 'blood', 'hide', 'bones', 'rattle', 'chant', 'drum',
+          'talon', 'gourd', 'moss', 'curse', 'hunter', 'ward',
         ],
       },
     },
