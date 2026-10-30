@@ -14,6 +14,16 @@ const GEMINI_ENDPOINT = `https://generativelanguage.googleapis.com/v1beta/models
 // used to smuggle an arbitrary long prompt through to Gemini.
 const MAX_FIELD_LENGTH = 80
 
+// Tone keys are whitelisted: the client picks a key, never free text, so
+// nothing user-supplied reaches the prompt as an instruction.
+const TONES = {
+  heroic: 'heroic and inspiring, with a sense of destiny',
+  grim: 'grim and foreboding, shaped by hardship and loss',
+  whimsical: 'light-hearted and whimsical, with playful charm',
+  mysterious: 'mysterious and secretive, hinting at hidden truths',
+  melancholic: 'melancholic and wistful, tinged with regret',
+}
+
 function allowedOrigins(env) {
   return env.ALLOWED_ORIGIN.split(',')
     .map((o) => o.trim())
@@ -83,6 +93,10 @@ router.post('/', async (request, env) => {
   const lineageLabel = clean(payload.lineageLabel)
   const callingLabel = payload.callingLabel ? clean(payload.callingLabel) : null
   const themeLabel = clean(payload.themeLabel)
+  const tone =
+    typeof payload.tone === 'string' && Object.hasOwn(TONES, payload.tone)
+      ? TONES[payload.tone]
+      : null
 
   if (!name || !lineageLabel || !themeLabel) {
     return json(
@@ -116,7 +130,9 @@ router.post('/', async (request, env) => {
           role: 'user',
           parts: [
             {
-              text: `Write a backstory for "${name}", a ${who} in a ${themeLabel.toLowerCase()} setting.`,
+              text:
+                `Write a backstory for "${name}", a ${who} in a ${themeLabel.toLowerCase()} setting.` +
+                (tone ? ` The tone should be ${tone}.` : ''),
             },
           ],
         },

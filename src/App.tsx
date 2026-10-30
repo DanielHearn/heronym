@@ -6,7 +6,7 @@ import LockIcon from './components/LockIcon'
 import FieldSelect from './components/FieldSelect'
 import ToggleGroup from './components/ToggleGroup'
 import ComplexityControl from './components/ComplexityControl'
-import Backstory from './components/Backstory'
+import Backstory, { type BackstoryTone } from './components/Backstory'
 import FamilyTree, { type FamilyTreeMember } from './components/FamilyTree'
 import Ledger, { type LedgerItem } from './components/Ledger'
 import './App.less'
@@ -14,6 +14,8 @@ import './App.less'
 // Bumped: pinned-name shape changed (raceLabel/classLabel -> lineageLabel/
 // callingLabel), so old stored pins wouldn't match the new type anyway.
 const PIN_STORAGE_KEY = 'heronym:pinned:v2'
+const HISTORY_STORAGE_KEY = 'heronym:history:v1'
+const HISTORY_LIMIT = 8
 
 type NameOptions = {
   first: boolean
@@ -23,6 +25,15 @@ type NameOptions = {
 }
 
 type NameEntry = LedgerItem
+
+function isNameEntry(value: unknown): value is NameEntry {
+  return (
+    typeof value === 'object' &&
+    value !== null &&
+    typeof (value as NameEntry).id === 'string' &&
+    typeof (value as NameEntry).full === 'string'
+  )
+}
 
 export default function App() {
   const [theme, setTheme] = useState<string>('fantasy')
@@ -41,7 +52,16 @@ export default function App() {
   const [current, setCurrent] = useState<NameEntry | null>(null)
   const [exportTree, setExportTree] = useState<{ id: string; members: FamilyTreeMember[] } | null>(null)
   const [exportBackstory, setExportBackstory] = useState<{ id: string; text: string } | null>(null)
-  const [history, setHistory] = useState<NameEntry[]>([])
+  const [backstoryTone, setBackstoryTone] = useState<BackstoryTone>('neutral')
+  const [history, setHistory] = useState<NameEntry[]>(() => {
+    try {
+      const raw = window.localStorage.getItem(HISTORY_STORAGE_KEY)
+      const parsed: unknown = raw ? JSON.parse(raw) : []
+      return Array.isArray(parsed) ? parsed.filter(isNameEntry).slice(0, HISTORY_LIMIT) : []
+    } catch {
+      return []
+    }
+  })
   const [pinned, setPinned] = useState<NameEntry[]>(() => {
     try {
       const raw = window.localStorage.getItem(PIN_STORAGE_KEY)
@@ -64,6 +84,14 @@ export default function App() {
       // storage unavailable (private browsing, quota, etc.) — pins just won't persist
     }
   }, [pinned])
+
+  useEffect(() => {
+    try {
+      window.localStorage.setItem(HISTORY_STORAGE_KEY, JSON.stringify(history))
+    } catch {
+      // storage unavailable — history just won't persist
+    }
+  }, [history])
 
   // Theme changes go through this handler so the theme and its dependent
   // selections update in one render. A separate effect would let the
@@ -121,7 +149,7 @@ export default function App() {
       themeLabel: themeData.label,
     }
     setCurrent(result)
-    setHistory((hist) => [result, ...hist].slice(0, 8))
+    setHistory((hist) => [result, ...hist].slice(0, HISTORY_LIMIT))
     setReveal(false)
     requestAnimationFrame(() => setReveal(true))
   }
@@ -406,6 +434,8 @@ export default function App() {
                 callingLabel={current.callingLabel}
                 themeLabel={current.themeLabel ?? themeData.label}
                 sourceId={current.id}
+                tone={backstoryTone}
+                onToneChange={setBackstoryTone}
                 onTextChange={updateExportBackstory}
               />
               <FamilyTree

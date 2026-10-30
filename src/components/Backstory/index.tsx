@@ -1,5 +1,23 @@
 import { useEffect, useRef, useState } from 'react'
+import FieldSelect from '../FieldSelect'
 import './Backstory.less'
+
+export type BackstoryTone =
+  | 'neutral'
+  | 'heroic'
+  | 'grim'
+  | 'whimsical'
+  | 'mysterious'
+  | 'melancholic'
+
+export const BACKSTORY_TONES: { value: BackstoryTone; label: string }[] = [
+  { value: 'neutral', label: 'Neutral' },
+  { value: 'heroic', label: 'Heroic' },
+  { value: 'grim', label: 'Grim' },
+  { value: 'whimsical', label: 'Whimsical' },
+  { value: 'mysterious', label: 'Mysterious' },
+  { value: 'melancholic', label: 'Melancholic' },
+]
 
 type BackstoryProps = {
   name: string
@@ -7,6 +25,8 @@ type BackstoryProps = {
   callingLabel: string | null
   themeLabel: string
   sourceId: string
+  tone: BackstoryTone
+  onToneChange: (tone: BackstoryTone) => void
   onTextChange: (sourceId: string, text: string | null) => void
 }
 
@@ -74,6 +94,8 @@ export default function Backstory({
   callingLabel,
   themeLabel,
   sourceId,
+  tone,
+  onToneChange,
   onTextChange,
 }: BackstoryProps) {
   const [panelOpen, setPanelOpen] = useState(true)
@@ -83,9 +105,6 @@ export default function Backstory({
   const [retryAt, setRetryAt] = useState<number | null>(null)
   const [retrySeconds, setRetrySeconds] = useState(0)
 
-  // Guards against setting state after this instance is gone (unmounted
-  // when a new name replaces it) or after a newer generate() call has
-  // superseded an in-flight one (rapid re-clicks).
   const mountedRef = useRef(true)
   const requestId = useRef(0)
 
@@ -131,7 +150,7 @@ export default function Backstory({
       const response = await fetch(BACKSTORY_API, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, lineageLabel, callingLabel, themeLabel }),
+        body: JSON.stringify({ name, lineageLabel, callingLabel, themeLabel, tone }),
       })
       const data = await response.json()
       if (!response.ok) {
@@ -165,6 +184,16 @@ export default function Backstory({
       </div>
 
       <div id="backstory-content" className="backstory-content" hidden={!panelOpen}>
+        <div className="backstory-tone">
+          <FieldSelect
+            id="backstory-tone-select"
+            label="Tone"
+            value={tone}
+            options={BACKSTORY_TONES}
+            onChange={(value) => onToneChange(value as BackstoryTone)}
+          />
+        </div>
+
         {status === 'idle' && (
           <button type="button" className="backstory-btn" onClick={generate}>
             Generate backstory
