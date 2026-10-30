@@ -65,18 +65,17 @@ export default function App() {
     }
   }, [pinned])
 
-  // Switching theme: lineage/calling keys aren't shared across themes, so
-  // reset both to "random". If the new theme has no calling axis at all,
-  // also drop a stale Title toggle rather than leave it checked with
-  // nothing behind it.
-  useEffect(() => {
+  // Theme changes go through this handler so the theme and its dependent
+  // selections update in one render. A separate effect would let the
+  // generator run once with the new theme and the old lineage key.
+  function changeTheme(next: string) {
+    setTheme(next)
     setLineage('random')
     setCalling('random')
-    if (!themeData.calling) {
+    if (!THEMES[next].calling) {
       setOpts((o) => (o.title ? { ...o, title: false } : o))
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [theme])
+  }
 
   useEffect(() => {
     generate()
@@ -257,7 +256,7 @@ export default function App() {
               label="Theme"
               value={theme}
               options={THEME_KEYS.map((k) => ({ value: k, label: THEMES[k].label }))}
-              onChange={setTheme}
+              onChange={changeTheme}
             />
 
             <FieldSelect

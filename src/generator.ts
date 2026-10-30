@@ -1,74 +1,3 @@
-import { THEMES } from './data'
-import type { LineageEntry, CallingEntry } from './data/types'
-
-export function pick(arr) {
-  return arr[Math.floor(Math.random() * arr.length)]
-}
-
-export function randInt(min, max) {
-  return min + Math.floor(Math.random() * (max - min + 1))
-}
-
-export function capitalize(s) {
-  return s.charAt(0).toUpperCase() + s.slice(1)
-}
-
-export function makeId() {
-  if (typeof crypto !== 'undefined' && crypto.randomUUID) return crypto.randomUUID()
-  return 'id-' + Date.now() + '-' + Math.random().toString(36).slice(2, 10)
-}
-
-function forgeSyllable(bank) {
-  let s = pick(bank.onsets) + pick(bank.vowels)
-  if (Math.random() < bank.codaChance) s += pick(bank.codas)
-  return s
-}
-
-export function syllableRange(bank, complexity) {
-  const offset = complexity - 3 // complexity 1..5, 3 is each lineage's natural baseline
-  const min = Math.max(1, bank.min + offset)
-  const max = Math.min(8, Math.max(min, bank.max + offset))
-  return [min, max]
-}
-
-export function forgePersonalName(bank, avoid, complexity) {
-  const [minS, maxS] = syllableRange(bank, complexity)
-  for (let attempt = 0; attempt < 6; attempt++) {
-    const n = randInt(minS, maxS)
-    let s = ''
-    for (let i = 0; i < n; i++) s += forgeSyllable(bank)
-    const name = capitalize(s)
-    if (name !== avoid) return name
-  }
-  return capitalize(pick(bank.onsets) + pick(bank.vowels) + pick(bank.codas))
-}
-
-export function forgeCompound(bank, complexity) {
-  // complexity 1: root only; 2-3: root + tail; 4-5: extra root fragment(s) chained in
-  const extra = Math.max(0, complexity - 3)
-  let s = pick(bank.prefixes)
-  for (let i = 0; i < extra; i++) s += pick(bank.prefixes).toLowerCase()
-  if (complexity <= 1) return s
-  s += pick(bank.suffixes).toLowerCase()
-  return s
-}
-
-type NameOptions = {
-  first: boolean
-  middle: boolean
-  surname: boolean
-  title: boolean
-}
-
-export type NamePartKey = 'first' | 'middle' | 'surname' | 'title'
-export type NameParts = Record<NamePartKey, string | null>
-export type LockedNamePart = {
-  value: string
-  lineageLabel: string
-  callingLabel: string | null
-}
-export type LockedNameParts = Partial<Record<NamePartKey, LockedNamePart>>
-
 export function buildName(
   themeKey: string,
   lineageKey: string,
@@ -80,11 +9,20 @@ export function buildName(
   const theme = THEMES[themeKey]
 
   const lineageKeys = Object.keys(theme.lineage)
-  const lKey = lineageKey === 'random' ? pick(lineageKeys) : lineageKey
+  // Fall back to a random key if the requested one doesn't exist in this
+  // theme (e.g. a stale key carried over from a different theme).
+  const lKey =
+    lineageKey === 'random' || !theme.lineage[lineageKey]
+      ? pick(lineageKeys)
+      : lineageKey
   const lineage: LineageEntry = theme.lineage[lKey]
 
   const callingKeys = theme.calling ? Object.keys(theme.calling) : []
-  const cKey = theme.calling ? (callingKey === 'random' || !callingKey ? pick(callingKeys) : callingKey) : null
+  const cKey = theme.calling
+    ? callingKey === 'random' || !callingKey || !theme.calling[callingKey]
+      ? pick(callingKeys)
+      : callingKey
+    : null
   const calling: CallingEntry | null = theme.calling && cKey ? theme.calling[cKey] : null
 
   let first: string | null = null
