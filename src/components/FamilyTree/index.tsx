@@ -1,5 +1,6 @@
 import { useEffect, useLayoutEffect, useRef, useState, type PointerEvent } from 'react'
 import { buildName, makeId, pick } from '../../generator'
+import type { Gender } from '../../data'
 import './FamilyTree.less'
 
 export type FamilyTreeMember = {
@@ -22,6 +23,7 @@ type FamilyTreeProps = {
   callingKey: string | null
   complexity: number
   hasSurname: boolean
+  gender: Gender
   sourceId: string
   onMembersChange: (sourceId: string, members: FamilyTreeMember[]) => void
 }
@@ -294,6 +296,13 @@ function layoutMembers(members: FamilyTreeMember[]) {
   return { placed, edges, width, height }
 }
 
+// Relatives are drawn independently, so a family can mix genders. Only
+// masculine and feminine are used here, since every relative needs a
+// presentation to draw names from.
+function relativeGender(): Gender {
+  return Math.random() < 0.5 ? 'masculine' : 'feminine'
+}
+
 export default function FamilyTree({
   name,
   lineageLabel,
@@ -304,6 +313,7 @@ export default function FamilyTree({
   callingKey,
   complexity,
   hasSurname,
+  gender: _characterGender,
   sourceId,
   onMembersChange,
 }: FamilyTreeProps) {
@@ -327,12 +337,15 @@ export default function FamilyTree({
   function generateSurname(avoid = '') {
     let surname = ''
     do {
+      // Surnames are shared across genders, so they always use 'any'.
       surname = buildName(
         themeKey,
         lineageKey,
         callingKey,
         { first: false, middle: false, surname: true, title: false },
         complexity,
+        {},
+        'any',
       ).full
     } while (surname === avoid)
     return surname
@@ -351,6 +364,8 @@ export default function FamilyTree({
       callingKey,
       { first: true, middle: false, surname: false, title: false },
       complexity,
+      {},
+      relativeGender(),
     ).full
     const relativeSurname = hasSurname ? (surname ?? generateSurname(avoidSurname)) : ''
     const fullName = [generatedName, relativeSurname].filter(Boolean).join(' ')

@@ -1,5 +1,11 @@
-import { THEMES } from './data'
-import type { LineageEntry, CallingEntry } from './data/types'
+import {
+  THEMES,
+  type Gender,
+  type LineageEntry,
+  type CallingEntry,
+  type CompoundBank,
+  type SyllBank,
+} from './data'
 
 export function pick(arr) {
   return arr[Math.floor(Math.random() * arr.length)]
@@ -69,6 +75,26 @@ export type LockedNamePart = {
 }
 export type LockedNameParts = Partial<Record<NamePartKey, LockedNamePart>>
 
+// Each lineage's gender layers override only the fields they define.
+function syllForGender(lineage: LineageEntry, gender: Gender): SyllBank {
+  const neutral: SyllBank = {
+    ...lineage.syll,
+    ...lineage.neutral,
+  }
+
+  if (gender === 'neutral') return neutral
+
+  const lineageOverride = gender === 'masculine' ? lineage.masculine : lineage.feminine
+  return { ...neutral, ...lineageOverride }
+}
+
+// Titles fall back to the shared bank when no gendered version exists.
+function titleForGender(calling: CallingEntry, gender: Gender): CompoundBank {
+  if (gender === 'masculine' && calling.masculineTitle) return calling.masculineTitle
+  if (gender === 'feminine' && calling.feminineTitle) return calling.feminineTitle
+  return calling.title
+}
+
 export function buildName(
   themeKey: string,
   lineageKey: string,
@@ -76,6 +102,7 @@ export function buildName(
   opts: NameOptions,
   complexity: number,
   lockedParts: LockedNameParts = {},
+  gender: Gender = 'any',
 ) {
   const theme = THEMES[themeKey]
 
@@ -96,6 +123,10 @@ export function buildName(
     : null
   const calling: CallingEntry | null = theme.calling && cKey ? theme.calling[cKey] : null
 
+  const generatedGender: Gender =
+    gender === 'any' ? pick(['neutral', 'masculine', 'feminine'] as Gender[]) : gender
+  const syll = syllForGender(lineage, generatedGender)
+
   let first: string | null = null
   let middle: string | null = null
   let surname: string | null = null
@@ -103,14 +134,15 @@ export function buildName(
   const parts: string[] = []
 
   if (opts.first) {
-    first = lockedParts.first?.value ?? forgePersonalName(lineage.syll, null, complexity)
+    first = lockedParts.first?.value ?? forgePersonalName(syll, null, complexity)
     parts.push(first)
   }
   if (opts.middle) {
-    middle = lockedParts.middle?.value ?? forgePersonalName(lineage.syll, first, complexity)
+    middle = lockedParts.middle?.value ?? forgePersonalName(syll, first, complexity)
     parts.push(middle)
   }
   if (opts.surname) {
+    // Surnames are shared across genders, so they always use the base bank.
     surname = lockedParts.surname?.value ?? forgeCompound(lineage.surname, complexity)
     parts.push(surname)
   }
@@ -120,7 +152,9 @@ export function buildName(
 
   // Title only ever generates when the theme actually has a calling axis.
   if (opts.title && calling) {
-    title = lockedParts.title?.value ?? forgeCompound(calling.title, complexity)
+    title =
+      lockedParts.title?.value ??
+      forgeCompound(titleForGender(calling, generatedGender), complexity)
     full = base ? `${base}, the ${title}` : `The ${title}`
   } else {
     full = base

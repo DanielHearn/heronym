@@ -1,5 +1,5 @@
 import { useState, useMemo, useEffect, useCallback } from 'react'
-import { THEMES, THEME_KEYS } from './data'
+import { THEMES, THEME_KEYS, type Gender } from './data'
 import { buildName, makeId, type LockedNameParts, type NamePartKey } from './generator'
 import PinIcon from './components/PinIcon'
 import LockIcon from './components/LockIcon'
@@ -43,6 +43,7 @@ export default function App() {
 
   const [lineage, setLineage] = useState<string>('random')
   const [calling, setCalling] = useState<string>('random')
+  const [gender, setGender] = useState<Gender>('any')
   const [opts, setOpts] = useState<NameOptions>({
     first: true,
     middle: false,
@@ -108,7 +109,7 @@ export default function App() {
   useEffect(() => {
     generate()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [theme, lineage, calling, opts, complexity])
+  }, [theme, lineage, calling, opts, complexity, gender])
 
   const anySelected = opts.first || opts.middle || opts.surname || opts.title
 
@@ -132,6 +133,7 @@ export default function App() {
       opts,
       complexity,
       lockedParts,
+      gender,
     )
     while (generated.full === current?.full) {
       generated = buildName(
@@ -141,6 +143,7 @@ export default function App() {
         opts,
         complexity,
         lockedParts,
+        gender,
       )
     }
     const result: NameEntry = {
@@ -313,6 +316,19 @@ export default function App() {
               />
             )}
 
+            <FieldSelect
+              id="gender-select"
+              label="Gender"
+              value={gender}
+              options={[
+                { value: 'any', label: 'Any' },
+                { value: 'masculine', label: 'Masculine' },
+                { value: 'feminine', label: 'Feminine' },
+                { value: 'neutral', label: 'Neutral' },
+              ]}
+              onChange={(value) => setGender(value as Gender)}
+            />
+
             <h2 style={{ marginTop: '26px' }}>Name Parts</h2>
             <ToggleGroup opts={opts} onToggle={toggle} titleEnabled={!!themeData.calling} />
 
@@ -449,6 +465,7 @@ export default function App() {
                 callingKey={familyCallingKey}
                 complexity={complexity}
                 hasSurname={opts.surname}
+                gender={gender}
                 sourceId={current.id}
                 onMembersChange={updateExportTree}
               />

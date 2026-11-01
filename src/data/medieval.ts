@@ -13,6 +13,8 @@ export const medieval: Theme = {
   lineage: {
     anglo: {
       label: 'Anglo-Saxon',
+      masculine: { codas: ['ric', 'wald', 'helm', 'mund', 'stan', 'gar'], codaChance: 0.7 },
+      feminine: { codas: ['hild', 'wyn', 'frith', 'burh', 'thryth', 'a'], codaChance: 0.65 },
       syll: {
         onsets: ['b', 'c', 'd', 'w', 'wulf', 'aed', 'ead', 'os', 'al', 'br', 'aelf', 'cyne', 'ed', 'leof', 'sae', ''],
         vowels: ['a', 'e', 'i', 'o', 'ae', 'u', 'ea', 'y'],
@@ -28,6 +30,8 @@ export const medieval: Theme = {
     },
     norman: {
       label: 'Norman',
+      masculine: { codas: ['ard', 'bert', 'mont', 'fray', 'ric', 'court'], codaChance: 0.65 },
+      feminine: { codas: ['ette', 'elle', 'aine', 'fleur', 'e', 'ine'], codaChance: 0.65 },
       syll: {
         onsets: ['g', 'r', 'b', 'h', 'j', 'ger', 'rob', 'gil', 'hu', 'al', 'ber', 'con', 'ful', 'ma', ''],
         vowels: ['a', 'e', 'o', 'ie', 'ou', 'i', 'u', 'ai', 'ei'],
@@ -43,6 +47,8 @@ export const medieval: Theme = {
     },
     norse: {
       label: 'Norse',
+      masculine: { codas: ['ulf', 'bjorn', 'stein', 'vald', 'rik', 'gar'], codaChance: 0.7 },
+      feminine: { codas: ['dis', 'gunn', 'hild', 'run', 'ey', 'frid'], codaChance: 0.65 },
       syll: {
         onsets: ['b', 'g', 'h', 'k', 'r', 's', 't', 'th', 'sv', 'ul', 'ar', 'bj', 'sig', 'ha', 'fr', 'ing', ''],
         vowels: ['a', 'i', 'o', 'u', 'e', 'y', 'ei', 'au', 'jo'],
@@ -58,6 +64,8 @@ export const medieval: Theme = {
     },
     gaelic: {
       label: 'Gaelic',
+      masculine: { codas: ['an', 'ach', 'ran', 'darragh', 'ain', 'bran'], codaChance: 0.65 },
+      feminine: { codas: ['een', 'in', 'agh', 'dara', 'na', 'ait'], codaChance: 0.65 },
       syll: {
         onsets: ['b', 'c', 'd', 'f', 'g', 'l', 'm', 'n', 'r', 's', 't', 'ch', 'fionn', 'ciar', 'dar', 'bran', 'ruad', 'ea', 'eo', 'con', ''],
         vowels: ['a', 'e', 'i', 'o', 'u', 'ai', 'ia', 'ea', 'ui', 'io'],
@@ -73,6 +81,8 @@ export const medieval: Theme = {
     },
     welsh: {
       label: 'Welsh',
+      masculine: { codas: ['wyn', 'ydd', 'dd', 'ion', 'or', 'udd'], codaChance: 0.65 },
+      feminine: { codas: ['wen', 'eth', 'aith', 'ys', 'en', 'a'], codaChance: 0.65 },
       syll: {
         onsets: ['b', 'c', 'd', 'g', 'm', 'n', 'p', 'r', 't', 'll', 'gw', 'rh', 'cad', 'bryn', 'owen', 'myr', 'gwyn', ''],
         vowels: ['a', 'e', 'i', 'o', 'u', 'y', 'ae', 'wy', 'ai', 'au'],
@@ -88,6 +98,8 @@ export const medieval: Theme = {
     },
     frankish: {
       label: 'Frankish',
+      masculine: { codas: ['bert', 'hard', 'ric', 'bald', 'wig', 'ulf'], codaChance: 0.7 },
+      feminine: { codas: ['hild', 'lind', 'ruth', 'dis', 'a', 'burg'], codaChance: 0.65 },
       syll: {
         onsets: ['c', 'ch', 'd', 'f', 'g', 'h', 'l', 'r', 't', 'w', 'b', 'hil', 'lud', 'ber', 'gun', 'hro', 'wal'],
         vowels: ['a', 'e', 'i', 'o', 'u', 'ai', 'ei', 'au', 'ie', 'oi'],
@@ -103,6 +115,8 @@ export const medieval: Theme = {
     },
     castilian: {
       label: 'Castilian',
+      masculine: { codas: ['o', 'ando', 'ino', 'ez', 'ón', 'uel'], codaChance: 0.65 },
+      feminine: { codas: ['a', 'ia', 'ita', 'ela', 'ina', 'ez'], codaChance: 0.65 },
       syll: {
         onsets: ['b', 'c', 'd', 'f', 'g', 'j', 'l', 'm', 'n', 'p', 'r', 's', 't', 'v', 'll', 'ñ', 'fern', 'alf', 'gon', 'ped', 'rod', 'sanc', 'ram', ''],
         vowels: ['a', 'e', 'i', 'o', 'u', 'ia', 'ie', 'io', 'ue', 'ai'],
@@ -118,6 +132,8 @@ export const medieval: Theme = {
     },
     lombard: {
       label: 'Lombard',
+      masculine: { codas: ['aldo', 'ardo', 'berto', 'one', 'ino', 'ari'], codaChance: 0.65 },
+      feminine: { codas: ['ella', 'ina', 'etta', 'aria', 'a', 'uci'], codaChance: 0.65 },
       syll: {
         onsets: ['b', 'c', 'd', 'f', 'g', 'l', 'm', 'n', 'p', 'r', 's', 't', 'v', 'gu', 'ar', 'bert', 'aldo', 'gis', 'ger', 'fo', 'sta', ''],
         vowels: ['a', 'e', 'i', 'o', 'u', 'ia', 'ie', 'io', 'ai', 'ei'],
@@ -133,6 +149,8 @@ export const medieval: Theme = {
     },
     byzantine: {
       label: 'Byzantine',
+      masculine: { codas: ['os', 'ios', 'ides', 'on', 'ikos', 'as'], codaChance: 0.65 },
+      feminine: { codas: ['ia', 'ene', 'issa', 'e', 'a', 'is'], codaChance: 0.65 },
       syll: {
         onsets: ['th', 'k', 'p', 'ph', 'ch', 'l', 'm', 'n', 's', 't', 'x', 'ar', 'kon', 'leo', 'nik', 'theo', 'dem', 'ioan', 'pa', 'ze'],
         vowels: ['a', 'e', 'i', 'o', 'u', 'ou', 'ai', 'ei', 'io', 'oi'],

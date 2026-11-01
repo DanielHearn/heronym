@@ -6,6 +6,11 @@
 // (", the Ironclad"), and some themes won't want that axis at all. When a
 // theme omits `calling`, the UI drops the Calling dropdown and the Title
 // toggle entirely instead of showing a dropdown that has nothing to offer.
+//
+// Themes can provide shared gendered syllable defaults, with optional
+// lineage-specific overrides. Callings may also supply gendered title banks.
+
+export type Gender = 'any' | 'masculine' | 'feminine' | 'neutral'
 
 export type SyllBank = {
   onsets: string[]
@@ -24,12 +29,19 @@ export type CompoundBank = {
 export type LineageEntry = {
   label: string
   syll: SyllBank
+  // Optional gendered layers. Each one overrides only the fields it defines.
+  neutral?: Partial<SyllBank>
+  masculine?: Partial<SyllBank>
+  feminine?: Partial<SyllBank>
   surname: CompoundBank
 }
 
 export type CallingEntry = {
   label: string
   title: CompoundBank
+  // Optional gendered titles, e.g. "Knight" vs "Dame". Falls back to `title`.
+  masculineTitle?: CompoundBank
+  feminineTitle?: CompoundBank
 }
 
 export type Theme = {

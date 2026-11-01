@@ -12,6 +12,8 @@ export const scifi: Theme = {
   lineage: {
     colonist: {
       label: 'Colonist',
+      masculine: { codas: ['ton', 'vek', 'cor', 'x', 'den', 'ar'], codaChance: 0.65 },
+      feminine: { codas: ['lia', 'ara', 'nis', 'ae', 'ris', 'ia'], codaChance: 0.65 },
       syll: {
         onsets: ['j', 'k', 'r', 's', 't', 'v', 'br', 'kr', 'st', 'tr', 'zar', 'nov', 'cal', 'cy', 'ex', 'ly', 'or', ''],
         vowels: ['a', 'e', 'i', 'o', 'ae', 'io', 'u', 'y', 'ai', 'ei', 'ou'],
@@ -27,6 +29,8 @@ export const scifi: Theme = {
     },
     android: {
       label: 'Android',
+      masculine: { codas: ['x', '9', 'tron', 'sys', '01', 'k'], codaChance: 0.7 },
+      feminine: { codas: ['ix', '7', 'ara', 'yne', 'ia', 'ex'], codaChance: 0.7 },
       syll: {
         onsets: ['x', 'z', 'q', 'v', 'kx', 'zr', 'un', '0', 'ax', 'cy', 'd', 'nex', 'sy', ''],
         vowels: ['i', 'o', 'e', 'y', '-', 'a', 'u', 'ae', 'ii'],
@@ -42,6 +46,8 @@ export const scifi: Theme = {
     },
     hiveborn: {
       label: 'Hiveborn',
+      masculine: { codas: ['k', 'rr', 'ix', 'nix', 'kk', 'th'], codaChance: 0.8 },
+      feminine: { codas: ['za', 'ss', 'oa', 'ith', 'zza', 'ix'], codaChance: 0.8 },
       syll: {
         onsets: ['kk', 'zz', 'th', 'sk', 'chr', 'zik', 'vor', 'xik', 'kra', 'ss', 'vra', 'zha'],
         vowels: ['i', 'a', 'u', 'ii', 'e', 'ai', 'oa'],
@@ -57,6 +63,8 @@ export const scifi: Theme = {
     },
     belter: {
       label: 'Belter',
+      masculine: { codas: ['dak', 'gan', 'rd', 'ck', 'k', 'ren'], codaChance: 0.7 },
+      feminine: { codas: ['ren', 'la', 'ara', 'll', 'a', 'gan'], codaChance: 0.65 },
       syll: {
         onsets: ['d', 'g', 'h', 'k', 'm', 'r', 't', 'v', 'br', 'dr', 'gr', 'sk', 'ro', 'ha', ''],
         vowels: ['a', 'o', 'u', 'e', 'i', 'ao', 'ou'],
@@ -72,6 +80,8 @@ export const scifi: Theme = {
     },
     martian: {
       label: 'Martian',
+      masculine: { codas: ['tar', 'lon', 'ros', 'ium', 'th', 's'], codaChance: 0.65 },
+      feminine: { codas: ['ia', 'ara', 'is', 'ea', 'ria', 'ros'], codaChance: 0.65 },
       syll: {
         onsets: ['m', 'r', 't', 's', 'k', 'h', 'v', 'ar', 'sol', 'ru', 'tha', 'ky', 'ma', 'ph', 'ne', ''],
         vowels: ['a', 'e', 'i', 'o', 'u', 'ai', 'ia', 'ea', 'io'],
@@ -87,6 +97,8 @@ export const scifi: Theme = {
     },
     clone: {
       label: 'Clone',
+      masculine: { codas: ['id', 'ex', 'ar', 'ion', 'x', 'k'], codaChance: 0.65 },
+      feminine: { codas: ['ta', 'ia', 'ene', 'ex', 'a', 'ion'], codaChance: 0.65 },
       syll: {
         onsets: ['c', 'd', 'l', 'm', 'n', 'p', 'r', 's', 't', 'v', 'ax', 'ver', 'cl', 'ge', 'tau', ''],
         vowels: ['a', 'e', 'i', 'o', 'u', 'y', 'ae', 'ei'],
@@ -102,6 +114,8 @@ export const scifi: Theme = {
     },
     psion: {
       label: 'Psion',
+      masculine: { codas: ['ath', 'ion', 'th', 'ris', 'ex', 'vyn'], codaChance: 0.7 },
+      feminine: { codas: ['iel', 'yra', 'is', 'eth', 'ia', 'vyn'], codaChance: 0.7 },
       syll: {
         onsets: ['th', 's', 'v', 'l', 'ph', 'm', 'n', 'ps', 'ven', 'ce', 'ar', 'ky', 'ir', 'e'],
         vowels: ['a', 'e', 'i', 'y', 'ie', 'ei', 'ae', 'o'],
@@ -117,6 +131,8 @@ export const scifi: Theme = {
     },
     augment: {
       label: 'Augment',
+      masculine: { codas: ['tek', 'max', 'ron', 'k', 'gen', 'x'], codaChance: 0.75 },
+      feminine: { codas: ['rix', 'dyne', 'ia', 'ex', 'gen', 'a'], codaChance: 0.7 },
       syll: {
         onsets: ['b', 'c', 'g', 'k', 'm', 'p', 'r', 't', 'x', 'y', 'bolt', 'cog', 'rex', 'tek', 'vx', ''],
         vowels: ['a', 'e', 'i', 'o', 'u', 'ex', 'ax', 'ix'],
@@ -132,6 +148,8 @@ export const scifi: Theme = {
     },
     drifter: {
       label: 'Drifter',
+      masculine: { codas: ['ck', 'gan', 'rin', 't', 'jack', 'ko'], codaChance: 0.65 },
+      feminine: { codas: ['ko', 'lee', 'dy', 'ren', 'ay', 'rin'], codaChance: 0.65 },
       syll: {
         onsets: ['b', 'd', 'f', 'g', 'j', 'k', 'l', 'n', 'r', 's', 't', 'w', 'rh', 'sh', 'ja', 'ko', 'ren', ''],
         vowels: ['a', 'e', 'i', 'o', 'u', 'ay', 'oo', 'ee'],

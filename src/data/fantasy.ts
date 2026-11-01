@@ -3,6 +3,7 @@ import type { Theme } from './types'
 // This is the original RACES/CLASSES content from data.ts, restructured
 // under the shared lineage/calling shape. Nothing about the generation
 // logic changes for this theme — it's the same banks, same fusion rules.
+// Each lineage's gendered sound layers are tailored to its naming style.
 
 export const fantasy: Theme = {
   label: 'Fantasy',
@@ -11,6 +12,8 @@ export const fantasy: Theme = {
   lineage: {
     human: {
       label: 'Human',
+      masculine: { codas: ['ric', 'ald', 'win', 'ard', 'mund', 'ton'], codaChance: 0.65 },
+      feminine: { codas: ['a', 'elle', 'wen', 'ia', 'lyn', 'ette'], codaChance: 0.65 },
       syll: {
         onsets: [
           'b', 'c', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'm', 'n', 'p', 'r', 's', 't', 'v', 'w',
@@ -47,6 +50,20 @@ export const fantasy: Theme = {
         max: 3,
         codaChance: 0.55,
       },
+      // Shared Elven onsets for every gender.
+      neutral: {
+        onsets: ['th', 's', 'l', 'n', 'c', 'v', 'f', 'el', 'sil', 'cal', 'gal', 'mir', 'nim', 'fae', 'lor', 'ael', 'ith', 'lyr', 'sel', ''],
+      },
+      // Softer, open endings.
+      feminine: {
+        codas: ['riel', 'wen', 'iel', 'lith', 'ra', 'viel', 'ael'],
+        codaChance: 0.7,
+      },
+      // Firmer endings with fewer codas.
+      masculine: {
+        codas: ['dor', 'las', 'thal', 'ion', 'n', 'r', 'thir'],
+        codaChance: 0.45,
+      },
       surname: {
         prefixes: [
           'Moon', 'Star', 'Silver', 'Dusk', 'Night', 'Sun', 'Ember', 'Frost', 'Wind', 'Thorn',
@@ -62,6 +79,8 @@ export const fantasy: Theme = {
     },
     dwarf: {
       label: 'Dwarf',
+      masculine: { codas: ['grim', 'gar', 'dun', 'drum', 'bek', 'rik'], codaChance: 0.8 },
+      feminine: { codas: ['dis', 'hild', 'run', 'dora', 'wen', 'a'], codaChance: 0.75 },
       syll: {
         onsets: ['b', 'd', 'g', 'k', 'gr', 'br', 'dr', 'kr', 'th', 'st', 'bal', 'thor', 'dur', 'grim', 'kor', 'or', 'bar', 'brok', 'dwal', 'far', 'thra'],
         vowels: ['a', 'o', 'u', 'or', 'ur', 'ai', 'au', 'ei'],
@@ -85,6 +104,8 @@ export const fantasy: Theme = {
     },
     orc: {
       label: 'Orc',
+      masculine: { codas: ['gash', 'rok', 'nak', 'thok', 'zug', 'k'], codaChance: 0.9 },
+      feminine: { codas: ['gra', 'shka', 'zha', 'gash', 'ruk', 'a'], codaChance: 0.85 },
       syll: {
         onsets: ['g', 'k', 'z', 'v', 'x', 'gr', 'kr', 'vr', 'zg', 'ug', 'mor', 'thok', 'drak', 'gar', 'gor', 'rak', 'snar', 'urg'],
         vowels: ['a', 'u', 'o', 'ak', 'ug', 'ash', 'û', 'â'],
@@ -108,6 +129,8 @@ export const fantasy: Theme = {
     },
     halfling: {
       label: 'Halfling',
+      masculine: { codas: ['wick', 'well', 'by', 'kin', 'ot', 'wise'], codaChance: 0.6 },
+      feminine: { codas: ['berry', 'belle', 'y', 'in', 'petal', 'bloom'], codaChance: 0.65 },
       syll: {
         onsets: ['b', 'p', 't', 'd', 'w', 'br', 'fl', 'gl', 'pl', 'tob', 'pip', 'mil', 'ros', 'dai', 'bim', 'cob', 'hob', 'merry', 'posy'],
         vowels: ['i', 'o', 'a', 'e', 'ie', 'oo', 'u', 'ea', 'ai'],
@@ -131,6 +154,8 @@ export const fantasy: Theme = {
     },
     gnome: {
       label: 'Gnome',
+      masculine: { codas: ['ix', 'bit', 'wick', 'et', 'bolt', 'ble'], codaChance: 0.75 },
+      feminine: { codas: ['ette', 'izzle', 'wink', 'le', 'belle', 'ina'], codaChance: 0.75 },
       syll: {
         onsets: ['f', 'z', 't', 'w', 'sp', 'fl', 'fr', 'tw', 'cog', 'zig', 'tob', 'niff', 'wren', 'bix', 'diz', 'fizz', 'gim', 'quill'],
         vowels: ['i', 'e', 'o', 'izz', 'ib', 'a', 'u', 'ee'],
@@ -154,6 +179,8 @@ export const fantasy: Theme = {
     },
     tiefling: {
       label: 'Tiefling',
+      masculine: { codas: ['th', 'oth', 'vyr', 'rak', 'xus', 'zar'], codaChance: 0.75 },
+      feminine: { codas: ['zael', 'ria', 'eth', 'ara', 'iel', 'vex'], codaChance: 0.7 },
       syll: {
         onsets: ['z', 'x', 'v', 'k', 'd', 'dr', 'kr', 'zh', 'vh', 'ash', 'mor', 'nyr', 'sel', 'vel', 'zar', 'mal', 'ith'],
         vowels: ['a', 'i', 'o', 'ae', 'y', 'io', 'e', 'ai', 'û'],
@@ -177,6 +204,8 @@ export const fantasy: Theme = {
     },
     dragonborn: {
       label: 'Dragonborn',
+      masculine: { codas: ['rax', 'thar', 'goth', 'drax', 'kesh', 'vorn'], codaChance: 0.9 },
+      feminine: { codas: ['zora', 'vara', 'thra', 'kesh', 'ithra', 'a'], codaChance: 0.85 },
       syll: {
         onsets: ['dr', 'kr', 'thr', 'vr', 'zr', 'bh', 'rh', 'kas', 'vor', 'nyv', 'ith', 'tor', 'drav', 'khar', 'vrax', 'zora'],
         vowels: ['a', 'o', 'ae', 'ax', 'ex', 'i', 'ei', 'au'],
@@ -200,6 +229,8 @@ export const fantasy: Theme = {
     },
     halforc: {
       label: 'Half-Orc',
+      masculine: { codas: ['nak', 'gar', 'rok', 'th', 'dak', 'brak'], codaChance: 0.85 },
+      feminine: { codas: ['shka', 'vara', 'ga', 'ra', 'thra', 'zha'], codaChance: 0.8 },
       syll: {
         onsets: ['g', 'k', 'v', 'dr', 'thr', 'kr', 'ash', 'mol', 'dren', 'kar', 'gor', 'ruk', 'thar', 'brak'],
         vowels: ['a', 'u', 'o', 'e', 'i', 'au'],
@@ -223,6 +254,8 @@ export const fantasy: Theme = {
     },
     drow: {
       label: 'Drow',
+      masculine: { codas: ['zzin', 'ssra', 'th', 'dra', 'xil', 'vrae'], codaChance: 0.7 },
+      feminine: { codas: ['rae', 'vrae', 'lith', 'ssra', 'nyth', 'zha'], codaChance: 0.7 },
       syll: {
         onsets: ['v', 'z', 'q', 'x', 'dr', 'sh', 'ny', 'zh', 'bel', 'kael', 'ryl', 'sos', 'phae', 'zha', 'vel', 'xal'],
         vowels: ['a', 'i', 'ae', 'io', 'y', 'e', 'ei', 'ui'],
@@ -246,6 +279,8 @@ export const fantasy: Theme = {
     },
     nightelf: {
       label: 'Night Elf',
+      masculine: { codas: ['dor', 'th', 'aris', 'wyn', 'dil', 'n'], codaChance: 0.6 },
+      feminine: { codas: ['riel', 'ien', 'ara', 'wyn', 'luna', 'a'], codaChance: 0.65 },
       syll: {
         onsets: ['sh', 't', 'm', 'v', 'k', 'el', 'fen', 'ony', 'ash', 'or', 'ny', 'dor', 'fur', 'wyn', 'lun', 'thal', ''],
         vowels: ['a', 'i', 'e', 'o', 'y', 'ie', 'ae', 'ia', 'u', 'ei'],
@@ -269,6 +304,8 @@ export const fantasy: Theme = {
     },
     forsaken: {
       label: 'Forsaken',
+      masculine: { codas: ['oth', 'vex', 'ard', 'us', 'mor', 'th'], codaChance: 0.8 },
+      feminine: { codas: ['iel', 'eth', 'aris', 'yn', 'a', 'ira'], codaChance: 0.75 },
       syll: {
         onsets: ['v', 'kr', 'gr', 'sy', 'dre', 'mor', 'bl', 'x', 'z', 'de', 'cal', 'noth', 'ves', 'thal', 'noct', 'vael'],
         vowels: ['a', 'o', 'e', 'y', 'au', 'i', 'ae', 'ui'],
@@ -292,6 +329,8 @@ export const fantasy: Theme = {
     },
     tauren: {
       label: 'Tauren',
+      masculine: { codas: ['tah', 'ko', 'mo', 'to', 'wa', 'ho'], codaChance: 0.6 },
+      feminine: { codas: ['na', 'sha', 'ka', 'ra', 'ne', 'wa'], codaChance: 0.6 },
       syll: {
         onsets: ['ka', 'ta', 'ho', 'ma', 'ru', 'cha', 'ne', 'ah', 'oa', 'yo', 'gray', 'chief', 'ba', 'ko', 'mu', 'sha', 'taur'],
         vowels: ['a', 'o', 'u', 'ai', 'ei', 'e', 'i', 'au'],
@@ -315,6 +354,8 @@ export const fantasy: Theme = {
     },
     troll: {
       label: 'Troll',
+      masculine: { codas: ["'gar", "'tok", "'jin", 'dun', "'zan", 'gash'], codaChance: 0.7 },
+      feminine: { codas: ["'za", "'vo", "'ash", "'kai", "'jin", 'gash'], codaChance: 0.7 },
       syll: {
         onsets: ['zul', 'sen', 'vol', 'mal', 'reth', 'haz', 'ra', 'zan', 'bwon', 'de', 'gaz', 'jan', 'jin', 'kal', 'mok', 'vaz'],
         vowels: ['a', 'i', 'o', 'u', 'ii', 'e', 'ai', 'ua'],
