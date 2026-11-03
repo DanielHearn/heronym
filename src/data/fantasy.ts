@@ -428,6 +428,13 @@ export const fantasy: Theme = {
         suffixes: ['keeper', 'shield', 'bound', 'ward', 'breaker', 'blade', 'guard', 'vow', 'bearer', 'light', 'heart', 'wing'],
       },
     },
+    priest: {
+      label: 'Priest',
+      title: {
+        prefixes: ['Faith', 'Temple', 'Holy', 'Blessed', 'Sacred', 'Dawn', 'Grace', 'Hallow', 'Divine', 'Prayer', 'Sanct'],
+        suffixes: ['keeper', 'bearer', 'blessed', 'voice', 'warden', 'shepherd', 'light', 'hand', 'sworn', 'soul', 'heart'],
+      },
+    },
     bard: {
       label: 'Bard',
       title: {
