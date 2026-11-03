@@ -294,7 +294,11 @@ export default function App() {
     <div className="wrap">
       <div className="masthead">
         <h1>Heronym</h1>
-        <p>RPG name generator with various tools, built by <a href="https://danielhearn.co.uk">Daniel Hearn</a></p>
+        <p>
+          Generate fantasy, medieval, and sci-fi character names, then create
+          backstories, hooks, and family trees. Built by{' '}
+          <a href="https://danielhearn.co.uk">Daniel Hearn</a>
+        </p>
       </div>
 
       <div className="layout">
