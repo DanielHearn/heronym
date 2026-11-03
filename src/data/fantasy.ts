@@ -463,5 +463,12 @@ export const fantasy: Theme = {
         suffixes: ['bound', 'caller', 'weaver', 'pact', 'born', 'less', 'sworn', 'whisper', 'ward', 'forged', 'mark', 'wraith'],
       },
     },
+    shaman: {
+      label: 'Shaman',
+      title: {
+        prefixes: ['Spirit', 'Totem', 'Storm', 'Ancestor', 'Bone', 'Earth', 'Ember', 'Wild', 'Mist', 'Thunder', 'Dream', 'Root'],
+        suffixes: ['caller', 'speaker', 'walker', 'seer', 'bound', 'whisper', 'drum', 'touched', 'singer', 'warden', 'weaver', 'rider'],
+      },
+    },
   },
 }
