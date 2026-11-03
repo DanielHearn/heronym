@@ -264,7 +264,7 @@ export default function App() {
     <div className="wrap">
       <div className="masthead">
         <h1>Heronym</h1>
-        <p>A generator of names for heroes, villains, and everyone between</p>
+        <p>RPG name generator with various tools, built by <a href="https://danielhearn.co.uk">Daniel Hearn</a></p>
       </div>
 
       <div className="layout">
