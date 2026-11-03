@@ -414,6 +414,13 @@ export const fantasy: Theme = {
         suffixes: ['walker', 'warden', 'eyed', 'strider', 'friend', 'ward', 'tracker', 'hunter', 'guide', 'kin', 'scout', 'watch'],
       },
     },
+    hunter: {
+      label: 'Hunter',
+      title: {
+        prefixes: ['Beast', 'Hound', 'Falcon', 'Wolf', 'Lynx', 'Hawk', 'Talon', 'Fang', 'Stalk', 'Snare', 'Bear', 'Wildfang'],
+        suffixes: ['master', 'handler', 'tamer', 'keeper', 'stalker', 'caller', 'huntmaster', 'bonded', 'trapper', 'pack-lord', 'tracker', 'kin'],
+      },
+    },
     paladin: {
       label: 'Paladin',
       title: {
