@@ -68,6 +68,7 @@ export default function CharacterHook({
         body: JSON.stringify({
           type: 'character-hook',
           ...(section ? { section } : {}),
+          ...(section && hook ? { context: hook } : {}),
           name,
           lineageLabel,
           callingLabel,
