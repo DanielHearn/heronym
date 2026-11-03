@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import FieldSelect from '../FieldSelect'
+import { AI_API_URL } from '../../ai'
 import './Backstory.less'
 
 export type BackstoryTone =
@@ -32,7 +33,6 @@ type BackstoryProps = {
 
 type Status = 'idle' | 'loading' | 'done' | 'error'
 
-const BACKSTORY_API = 'https://heronym.hearndaniel.workers.dev/'
 const BACKSTORY_LIMIT_STORAGE_KEY = 'heronym:backstory-requests:v1'
 const BACKSTORY_REQUEST_LIMIT = 5
 const BACKSTORY_REQUEST_WINDOW_MS = 60_000
@@ -147,7 +147,7 @@ export default function Backstory({
     setError('')
 
     try {
-      const response = await fetch(BACKSTORY_API, {
+      const response = await fetch(AI_API_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name, lineageLabel, callingLabel, themeLabel, tone }),

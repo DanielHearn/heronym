@@ -23,6 +23,7 @@ const TONES = {
   mysterious: 'mysterious and secretive, hinting at hidden truths',
   melancholic: 'melancholic and wistful, tinged with regret',
 }
+const HOOK_SECTIONS = ['hook', 'motivation', 'flaw', 'secret']
 
 function allowedOrigins(env) {
   return env.ALLOWED_ORIGIN.split(',')
@@ -93,9 +94,28 @@ router.post('/', async (request, env) => {
   const lineageLabel = clean(payload.lineageLabel)
   const callingLabel = payload.callingLabel ? clean(payload.callingLabel) : null
   const themeLabel = clean(payload.themeLabel)
+  if (
+    payload.type !== undefined &&
+    payload.type !== 'character-hook' &&
+    payload.type !== 'backstory'
+  ) {
+    return json({ error: 'unsupported generation type' }, 400, corsHeaders(origin))
+  }
+  if (
+    payload.type === 'character-hook' &&
+    payload.section !== undefined &&
+    !HOOK_SECTIONS.includes(payload.section)
+  ) {
+    return json({ error: 'unsupported character hook section' }, 400, corsHeaders(origin))
+  }
   const tone =
     typeof payload.tone === 'string' && Object.hasOwn(TONES, payload.tone)
       ? TONES[payload.tone]
+      : null
+  const type = payload.type === 'character-hook' ? 'character-hook' : 'backstory'
+  const section =
+    type === 'character-hook' && HOOK_SECTIONS.includes(payload.section)
+      ? payload.section
       : null
 
   if (!name || !lineageLabel || !themeLabel) {
@@ -107,6 +127,15 @@ router.post('/', async (request, env) => {
   }
 
   const who = callingLabel ? `${lineageLabel} ${callingLabel}` : lineageLabel
+  const isHook = type === 'character-hook'
+  const systemText = isHook
+    ? section
+      ? `You write concise RPG character ${section}s. Return only the ${section}, in one or two sentences, with no label or list. Stay on topic and never break character or mention that you are an AI.`
+      : 'You create concise RPG character hooks. Return only valid JSON with exactly four string fields: "hook", "motivation", "flaw", and "secret". Each value should be one or two sentences, plain prose with no labels or lists. Keep them distinct and compatible. Stay on topic and never mention that you are an AI.'
+    : 'You write short RPG character backstories. Exactly two to three sentences, ' +
+      'plain prose, no headers or lists. Stay on topic and never break character or ' +
+      'mention that you are an AI.'
+  const outputLimit = isHook ? (section ? 250 : 700) : 6000
 
   const geminiRes = await fetch(GEMINI_ENDPOINT, {
     method: 'POST',
@@ -118,10 +147,7 @@ router.post('/', async (request, env) => {
       systemInstruction: {
         parts: [
           {
-            text:
-              'You write short RPG character backstories. Exactly two to three sentences, ' +
-              'plain prose, no headers or lists. Stay on topic and never break character or ' +
-              'mention that you are an AI.',
+            text: systemText,
           },
         ],
       },
@@ -130,16 +156,22 @@ router.post('/', async (request, env) => {
           role: 'user',
           parts: [
             {
-              text:
-                `Write a backstory for "${name}", a ${who} in a ${themeLabel.toLowerCase()} setting.` +
-                (tone ? ` The tone should be ${tone}.` : ''),
+              text: isHook
+                ? section
+                  ? `Write the ${section} for "${name}", a ${who} in a ${themeLabel.toLowerCase()} setting.` +
+                    (tone ? ` The tone should be ${tone}.` : '')
+                  : `Create a character hook, motivation, flaw, and secret for "${name}", a ${who} in a ${themeLabel.toLowerCase()} setting.` +
+                    (tone ? ` The tone should be ${tone}.` : '')
+                : `Write a backstory for "${name}", a ${who} in a ${themeLabel.toLowerCase()} setting.` +
+                  (tone ? ` The tone should be ${tone}.` : ''),
             },
           ],
         },
       ],
       generationConfig: {
         temperature: 0.9,
-        maxOutputTokens: 6000,
+        maxOutputTokens: outputLimit,
+        ...(isHook && !section ? { responseMimeType: 'application/json' } : {}),
       },
     }),
   })
@@ -163,7 +195,7 @@ router.post('/', async (request, env) => {
     if (isRateLimited) {
       return json(
         {
-          error: 'Backstory generation is temporarily rate-limited. Please try again shortly.',
+          error: `${isHook ? 'Character hook' : 'Backstory'} generation is temporarily rate-limited. Please try again shortly.`,
         },
         429,
         corsHeaders(origin),
@@ -181,6 +213,27 @@ router.post('/', async (request, env) => {
 
   if (!text) {
     return json({ error: 'empty response from model' }, 502, corsHeaders(origin))
+  }
+
+  if (isHook && !section) {
+    try {
+      const parsed = JSON.parse(text)
+      if (
+        typeof parsed !== 'object' ||
+        parsed === null ||
+        !HOOK_SECTIONS.every(
+          (field) => typeof parsed[field] === 'string' && parsed[field].trim(),
+        )
+      ) {
+        return json({ error: 'invalid character hook response from model' }, 502, corsHeaders(origin))
+      }
+      const hook = Object.fromEntries(
+        HOOK_SECTIONS.map((field) => [field, parsed[field].trim().slice(0, 500)]),
+      )
+      return json({ hook }, 200, corsHeaders(origin))
+    } catch {
+      return json({ error: 'invalid character hook response from model' }, 502, corsHeaders(origin))
+    }
   }
 
   return json({ text }, 200, corsHeaders(origin))

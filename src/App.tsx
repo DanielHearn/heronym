@@ -7,6 +7,7 @@ import FieldSelect from './components/FieldSelect'
 import ToggleGroup from './components/ToggleGroup'
 import ComplexityControl from './components/ComplexityControl'
 import Backstory, { type BackstoryTone } from './components/Backstory'
+import CharacterHook, { type CharacterHookData } from './components/CharacterHook'
 import FamilyTree, { type FamilyTreeMember } from './components/FamilyTree'
 import Ledger, { type LedgerItem } from './components/Ledger'
 import './App.less'
@@ -53,6 +54,10 @@ export default function App() {
   const [current, setCurrent] = useState<NameEntry | null>(null)
   const [exportTree, setExportTree] = useState<{ id: string; members: FamilyTreeMember[] } | null>(null)
   const [exportBackstory, setExportBackstory] = useState<{ id: string; text: string } | null>(null)
+  const [exportCharacterHook, setExportCharacterHook] = useState<{
+    id: string
+    hook: CharacterHookData
+  } | null>(null)
   const [backstoryTone, setBackstoryTone] = useState<BackstoryTone>('neutral')
   const [history, setHistory] = useState<NameEntry[]>(() => {
     try {
@@ -217,6 +222,9 @@ export default function App() {
       ...(exportBackstory?.id === current.id && exportBackstory.text
         ? { backstory: exportBackstory.text }
         : {}),
+      ...(exportCharacterHook?.id === current.id
+        ? { characterHook: exportCharacterHook.hook }
+        : {}),
     }
     const blob = new Blob([JSON.stringify(exportData, null, 2)], {
       type: 'application/json',
@@ -240,6 +248,12 @@ export default function App() {
   const updateExportBackstory = useCallback((id: string, text: string | null) => {
     setExportBackstory(text ? { id, text } : null)
   }, [])
+  const updateExportCharacterHook = useCallback(
+    (id: string, hook: CharacterHookData | null) => {
+      setExportCharacterHook(hook ? { id, hook } : null)
+    },
+    [],
+  )
 
   const kicker = useMemo(() => {
     if (!current) return 'a name awaits the forge'
@@ -453,6 +467,16 @@ export default function App() {
                 tone={backstoryTone}
                 onToneChange={setBackstoryTone}
                 onTextChange={updateExportBackstory}
+              />
+              <CharacterHook
+                key={`character-hook-${current.id}`}
+                name={current.full}
+                lineageLabel={current.lineageLabel}
+                callingLabel={current.callingLabel}
+                themeLabel={current.themeLabel ?? themeData.label}
+                sourceId={current.id}
+                tone={backstoryTone}
+                onHookChange={updateExportCharacterHook}
               />
               <FamilyTree
                 key={`family-tree-${current.id}`}
