@@ -10,6 +10,7 @@ import Backstory, { type BackstoryTone } from './components/Backstory'
 import CharacterHook, { type CharacterHookData } from './components/CharacterHook'
 import FamilyTree, { type FamilyTreeMember } from './components/FamilyTree'
 import Ledger, { type LedgerItem } from './components/Ledger'
+import { loadCharacterDetails, saveCharacterDetails } from './characterStorage'
 import './App.less'
 
 // Bumped: pinned-name shape changed (raceLabel/classLabel -> lineageLabel/
@@ -242,17 +243,28 @@ export default function App() {
     window.setTimeout(() => URL.revokeObjectURL(url), 0)
   }
 
-  const updateExportTree = useCallback((id: string, members: FamilyTreeMember[]) => {
-    setExportTree({ id, members })
-  }, [])
-  const updateExportBackstory = useCallback((id: string, text: string | null) => {
-    setExportBackstory(text ? { id, text } : null)
-  }, [])
+  const updateExportTree = useCallback(
+    (id: string, members: FamilyTreeMember[]) => {
+      setExportTree(members.length ? { id, members } : null)
+      if (members.length && current?.full) {
+        saveCharacterDetails(current.full, { familyTree: members })
+      }
+    },
+    [current?.full],
+  )
+  const updateExportBackstory = useCallback(
+    (id: string, text: string | null) => {
+      setExportBackstory(text ? { id, text } : null)
+      if (text && current?.full) saveCharacterDetails(current.full, { backstory: text })
+    },
+    [current?.full],
+  )
   const updateExportCharacterHook = useCallback(
     (id: string, hook: CharacterHookData | null) => {
       setExportCharacterHook(hook ? { id, hook } : null)
+      if (hook && current?.full) saveCharacterDetails(current.full, { characterHook: hook })
     },
-    [],
+    [current?.full],
   )
 
   const kicker = useMemo(() => {
@@ -273,6 +285,10 @@ export default function App() {
         (key) => familyTheme.calling?.[key].label === current?.callingLabel,
       ) ?? null
     : null
+  const characterDetails = useMemo(
+    () => (current?.full ? loadCharacterDetails(current.full) : {}),
+    [current?.full],
+  )
 
   return (
     <div className="wrap">
@@ -465,6 +481,7 @@ export default function App() {
                 themeLabel={current.themeLabel ?? themeData.label}
                 sourceId={current.id}
                 tone={backstoryTone}
+                initialText={characterDetails.backstory}
                 onToneChange={setBackstoryTone}
                 onTextChange={updateExportBackstory}
               />
@@ -476,6 +493,7 @@ export default function App() {
                 themeLabel={current.themeLabel ?? themeData.label}
                 sourceId={current.id}
                 tone={backstoryTone}
+                initialHook={characterDetails.characterHook}
                 onHookChange={updateExportCharacterHook}
               />
               <FamilyTree
@@ -491,6 +509,7 @@ export default function App() {
                 hasSurname={opts.surname}
                 gender={gender}
                 sourceId={current.id}
+                initialMembers={characterDetails.familyTree}
                 onMembersChange={updateExportTree}
               />
             </>

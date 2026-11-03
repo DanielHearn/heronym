@@ -25,6 +25,7 @@ type FamilyTreeProps = {
   hasSurname: boolean
   gender: Gender
   sourceId: string
+  initialMembers?: FamilyTreeMember[]
   onMembersChange: (sourceId: string, members: FamilyTreeMember[]) => void
 }
 
@@ -315,14 +316,17 @@ export default function FamilyTree({
   hasSurname,
   gender: _characterGender,
   sourceId,
+  initialMembers = [],
   onMembersChange,
 }: FamilyTreeProps) {
   const [panelOpen, setPanelOpen] = useState(true)
-  const [members, setMembers] = useState<FamilyTreeMember[]>([])
-  const [selectedMemberId, setSelectedMemberId] = useState<string | null>(null)
+  const [members, setMembers] = useState<FamilyTreeMember[]>(initialMembers)
+  const [selectedMemberId, setSelectedMemberId] = useState<string | null>(
+    () => initialMembers.find((member) => member.relationship === 'You')?.id ?? null,
+  )
   const [isPanning, setIsPanning] = useState(false)
   const treeViewportRef = useRef<HTMLDivElement | null>(null)
-  const centerTreeOnNextRender = useRef(false)
+  const centerTreeOnNextRender = useRef(initialMembers.length > 0)
   const dragRef = useRef<DragState | null>(null)
 
   useEffect(() => {

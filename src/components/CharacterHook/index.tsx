@@ -27,6 +27,7 @@ type CharacterHookProps = {
   themeLabel: string
   sourceId: string
   tone: BackstoryTone
+  initialHook?: CharacterHookData
   onHookChange: (sourceId: string, hook: CharacterHookData | null) => void
 }
 
@@ -47,9 +48,10 @@ export default function CharacterHook({
   themeLabel,
   sourceId,
   tone,
+  initialHook,
   onHookChange,
 }: CharacterHookProps) {
-  const [hook, setHook] = useState<CharacterHookData | null>(null)
+  const [hook, setHook] = useState<CharacterHookData | null>(initialHook ?? null)
   const [status, setStatus] = useState<Status>('idle')
   const [loadingSection, setLoadingSection] = useState<HookField | null>(null)
   const [error, setError] = useState('')

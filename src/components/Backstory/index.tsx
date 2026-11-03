@@ -27,6 +27,7 @@ type BackstoryProps = {
   themeLabel: string
   sourceId: string
   tone: BackstoryTone
+  initialText?: string
   onToneChange: (tone: BackstoryTone) => void
   onTextChange: (sourceId: string, text: string | null) => void
 }
@@ -95,12 +96,13 @@ export default function Backstory({
   themeLabel,
   sourceId,
   tone,
+  initialText,
   onToneChange,
   onTextChange,
 }: BackstoryProps) {
   const [panelOpen, setPanelOpen] = useState(true)
-  const [status, setStatus] = useState<Status>('idle')
-  const [text, setText] = useState('')
+  const [status, setStatus] = useState<Status>(initialText ? 'done' : 'idle')
+  const [text, setText] = useState(initialText ?? '')
   const [error, setError] = useState('')
   const [retryAt, setRetryAt] = useState<number | null>(null)
   const [retrySeconds, setRetrySeconds] = useState(0)
