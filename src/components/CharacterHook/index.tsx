@@ -51,6 +51,7 @@ export default function CharacterHook({
 }: CharacterHookProps) {
   const [hook, setHook] = useState<CharacterHookData | null>(null)
   const [status, setStatus] = useState<Status>('idle')
+  const [loadingSection, setLoadingSection] = useState<HookField | null>(null)
   const [error, setError] = useState('')
 
   useEffect(() => {
@@ -58,6 +59,7 @@ export default function CharacterHook({
   }, [hook, onHookChange, sourceId])
 
   async function generate(section?: HookField) {
+    setLoadingSection(section ?? null)
     setStatus('loading')
     setError('')
 
@@ -138,7 +140,14 @@ export default function CharacterHook({
         </button>
       )}
 
-      {status === 'loading' && <p className="character-hook-hint">Generating character hook</p>}
+      {status === 'loading' && (
+        <p className="character-hook-hint">
+          Generating{' '}
+          {loadingSection
+            ? HOOK_FIELDS.find(({ key }) => key === loadingSection)?.label.toLowerCase()
+            : 'character hook'}
+        </p>
+      )}
       {status === 'error' && <p className="character-hook-error">{error}</p>}
 
       {hook && (
