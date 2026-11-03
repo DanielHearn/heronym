@@ -28,9 +28,15 @@ export default function FieldSelect({
   const [activeIndex, setActiveIndex] = useState(-1)
   const inputRef = useRef<HTMLInputElement>(null)
   const selectedOption = options.find((option) => option.value === value)
+  const sortedOptions = [...options].sort((a, b) => {
+    const aIsRandom = a.value === 'random'
+    const bIsRandom = b.value === 'random'
+    if (aIsRandom !== bIsRandom) return aIsRandom ? -1 : 1
+    return a.label.localeCompare(b.label)
+  })
   const filteredOptions = searchable
-    ? options.filter((option) => option.label.toLowerCase().includes(query.toLowerCase()))
-    : options
+    ? sortedOptions.filter((option) => option.label.toLowerCase().includes(query.toLowerCase()))
+    : sortedOptions
 
   function chooseOption(option: FieldSelectOption) {
     onChange(option.value)
@@ -121,7 +127,7 @@ export default function FieldSelect({
           {isOpen && (
             <ul id={`${id}-options`} className="searchable-select-options" role="listbox">
               {filteredOptions.length ? (
-                filteredOptions.sort((a, b) => a.label.localeCompare(b.label)).map((option, index) => (
+                filteredOptions.map((option, index) => (
                   <li key={option.value} role="presentation">
                     <button
                       id={`${id}-option-${index}`}
