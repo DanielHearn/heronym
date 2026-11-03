@@ -121,7 +121,7 @@ export default function FieldSelect({
           {isOpen && (
             <ul id={`${id}-options`} className="searchable-select-options" role="listbox">
               {filteredOptions.length ? (
-                filteredOptions.map((option, index) => (
+                filteredOptions.sort((a, b) => a.label.localeCompare(b.label)).map((option, index) => (
                   <li key={option.value} role="presentation">
                     <button
                       id={`${id}-option-${index}`}
