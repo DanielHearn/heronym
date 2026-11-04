@@ -23,6 +23,19 @@
     letter-spacing: 0.06em;
     color: @gold-bright;
     margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    &::before {
+      content: '';
+      width: 8px;
+      height: 8px;
+      background: @wax-bright;
+      transform: rotate(45deg);
+      display: inline-block;
+      flex-shrink: 0;
+    }
   }
 }
 

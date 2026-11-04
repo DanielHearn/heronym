@@ -138,7 +138,7 @@ export default function CharacterHook({
           className="character-hook-button"
           onClick={() => void generate()}
         >
-          {status === 'error' ? 'Try again' : 'Create character hook'}
+          {status === 'error' ? 'Try again' : 'Generate character hook'}
         </button>
       )}
 
