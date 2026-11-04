@@ -205,6 +205,16 @@ router.post('/', async (request, env) => {
       errorDetails = body.toLowerCase()
     }
 
+    const isHighDemand =
+      geminiRes.status === 503 && /currently experiencing high demand|spikes in demand/i.test(errorDetails)
+    if (isHighDemand) {
+      return json(
+        { error: 'The AI service is currently experiencing high demand. Please try again later.' },
+        503,
+        corsHeaders(origin),
+      )
+    }
+
     const isRateLimited =
       geminiRes.status === 429 ||
       /resource_exhausted|rate_limit_exceeded|quota_exceeded|rate.?limit|too many requests|quota/i.test(
